@@ -1,6 +1,7 @@
 use std::{
     fs,
     str,
+    path::Path,
     io::{prelude::*, BufReader},
     net::{TcpListener, TcpStream},
 };
@@ -22,8 +23,14 @@ fn handel_connection(mut stream:TcpStream){
         .take_while(|line|!line.is_empty())
         .collect();
 
+    let file_name =  "index.html";
     let status_line = "HTTP/1.1 200 OK";
-    let contents = load_contents("index.html");
+    let contents: String = if Path::new(file_name).exsts() {
+        load_contents(file_name)
+    }else{
+        "err404 file not found".to_string()
+    };
+
     let length = contents.len();
 
     let response = format!("{status_line}\r\nContent-Length:{length}\r\n\r\n{contents}");
