@@ -1,6 +1,8 @@
+use crate::paths::DATA_PATH;
+
 fn find(uri: &str) -> String {
     //this should return "data/foo.html" (or whatever else, based on the URI) and keep uri's owner the same
-    "data".to_owned().clone() + &*uri
+    DATA_PATH.to_owned().clone() + &*uri
 }
 
 fn extract(http_request: &str) -> &str {

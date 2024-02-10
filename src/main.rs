@@ -1,6 +1,6 @@
 mod files;
 mod uri;
-mod defaults;
+mod paths;
 
 use std::{
     io::{prelude::*, BufReader},
@@ -31,15 +31,15 @@ fn handel_connection(mut stream:TcpStream){
         "GET / HTTP/1.1"=>("HTTP/1.1 200 OK","index.html"),
         "GET /sleep HTTP/1.1"=>{
             thread::sleep(Duration::from_secs(5));
-            ("HTTP/1.1 200 OK",defaults::DEFAULT_PATH)
+            ("HTTP/1.1 200 OK", paths::DEFAULT_PATH)
         }
-        _ => ("HTTP/1.1 404 NOT FOUND",defaults::NOT_FOUND_PATH),
+        _ => ("HTTP/1.1 404 NOT FOUND", paths::NOT_FOUND_PATH),
     };
 
     let contents = if files::file_exists(filename) {
         files::load_contents(filename)
     }else{
-        files::load_contents(defaults::NOT_FOUND_PATH)
+        files::load_contents(paths::NOT_FOUND_PATH)
     };
     let length = contents.len();
 
