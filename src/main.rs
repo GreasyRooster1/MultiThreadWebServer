@@ -1,13 +1,13 @@
+mod files;
+mod defaults;
+mod uri;
+
 use std::{
-    fs,
-    str,
-    path::Path,
     io::{prelude::*, BufReader},
     net::{TcpListener, TcpStream},
     thread,
     time::Duration,
 };
-
 use MultiThreadWebServer::ThreadPool;
 
 fn main() {
@@ -31,12 +31,16 @@ fn handel_connection(mut stream:TcpStream){
         "GET / HTTP/1.1"=>("HTTP/1.1 200 OK","index.html"),
         "GET /sleep HTTP/1.1"=>{
             thread::sleep(Duration::from_secs(5));
-            ("HTTP/1.1 200 OK","index.html")
+            ("HTTP/1.1 200 OK",defaults::DEFAULT_PATH)
         }
-        _ => ("HTTP/1.1 404 NOT FOUND","404.html"),
+        _ => ("HTTP/1.1 404 NOT FOUND",defaults::NOT_FOUND_PATH),
     };
 
-    let contents = check_error404(filename);
+    let contents = if files::file_exists(filename) {
+        files::load_contents(filename);
+    }else{
+        files::load_contents(defaults::NOT_FOUND_PATH)
+    };
     let length = contents.len();
 
     let response = format!("{status_line}\r\nContent-Length:{length}\r\n\r\n{contents}");
@@ -44,14 +48,3 @@ fn handel_connection(mut stream:TcpStream){
     stream.write_all(response.as_bytes()).unwrap()
 }
 
-fn check_error404(filename: &str) -> String{
-    if Path::new(filename).exists() {
-        load_contents(filename)
-    } else {
-        load_contents("404.html")
-    }
-}
-
-fn load_contents(file_name: &str) -> String {
-    fs::read_to_string(file_name).unwrap()
-}
