@@ -24,7 +24,6 @@ fn main() {
 fn handel_connection(mut stream:TcpStream){
     let buf_reader = BufReader::new(&mut stream);
     let request_line = buf_reader.lines().next().unwrap().unwrap();
-
     let uri = uri::extract(request_line.as_str());
     let client_addr = stream.local_addr().unwrap().ip().to_string();
 
@@ -35,7 +34,6 @@ fn handel_connection(mut stream:TcpStream){
     }else{
         uri::parse(uri::find(uri).as_str())
     };
-
     let (contents,status_line) = if files::file_exists(filename.as_str()) {
         (files::load_contents(filename.as_str()),"HTTP/1.1 200 OK")
     }else{
@@ -43,7 +41,6 @@ fn handel_connection(mut stream:TcpStream){
     };
 
     let length = contents.len();
-
     let response = format!("{status_line}\r\nContent-Length:{length}\r\n\r\n{contents}");
 
     stream.write_all(response.as_bytes()).unwrap();
