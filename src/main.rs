@@ -1,14 +1,12 @@
 mod files;
 mod uri;
 mod paths;
-
 use std::{
     io::{prelude::*, BufReader},
     net::{TcpListener, TcpStream},
-    thread,
-    time::Duration,
 };
 use MultiThreadWebServer::ThreadPool;
+use crate::paths::DEFAULT_PATH;
 
 fn main() {
     let listener = TcpListener::bind("127.0.0.1:8081").unwrap();
@@ -27,20 +25,20 @@ fn handel_connection(mut stream:TcpStream){
     let buf_reader = BufReader::new(&mut stream);
     let request_line = buf_reader.lines().next().unwrap().unwrap();
 
-    let (status_line,filename) = match &request_line[..] {
-        "GET / HTTP/1.1"=>("HTTP/1.1 200 OK","index.html"),
-        "GET /sleep HTTP/1.1"=>{
-            thread::sleep(Duration::from_secs(5));
-            ("HTTP/1.1 200 OK", paths::DEFAULT_PATH)
-        }
-        _ => ("HTTP/1.1 404 NOT FOUND", paths::NOT_FOUND_PATH),
+    let uri = uri::extract(request_line.as_str());
+
+    let filename = if uri.eq("/") {
+        DEFAULT_PATH.parse().unwrap()
+    }else{
+        uri::find(uri)
     };
 
-    let contents = if files::file_exists(filename) {
-        files::load_contents(filename)
+    let (contents,status_line) = if files::file_exists(filename.as_str()) {
+        (files::load_contents(filename.as_str()),"HTTP/1.1 200 OK")
     }else{
-        files::load_contents(paths::NOT_FOUND_PATH)
+        (files::load_contents(&paths::NOT_FOUND_PATH),"HTTP/1.1 404 NOT FOUND")
     };
+
     let length = contents.len();
 
     let response = format!("{status_line}\r\nContent-Length:{length}\r\n\r\n{contents}");
