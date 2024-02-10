@@ -1,10 +1,7 @@
 mod files;
 mod uri;
 mod paths;
-use std::{
-    io::{prelude::*, BufReader},
-    net::{TcpListener, TcpStream},
-};
+use std::{io::{prelude::*, BufReader}, net::{TcpListener, TcpStream}};
 use MultiThreadWebServer::ThreadPool;
 use crate::paths::DEFAULT_PATH;
 
@@ -23,7 +20,16 @@ fn main() {
 
 fn handel_connection(mut stream:TcpStream){
     let buf_reader = BufReader::new(&mut stream);
-    let request_line = buf_reader.lines().next().unwrap().unwrap();
+
+    let request_line_result = buf_reader.lines().next().unwrap();
+    let request_line = match request_line_result {
+        Ok(_) => request_line_result.unwrap(),
+        Err(_) => {
+            println!("Error caused on reading from buffer");
+            "GET /404 HTTP/1.1".to_string()
+        }
+    };
+
     let uri = uri::extract(request_line.as_str());
     let client_addr = stream.local_addr().unwrap().ip().to_string();
 
