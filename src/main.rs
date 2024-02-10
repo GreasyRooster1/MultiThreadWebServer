@@ -1,6 +1,6 @@
 mod files;
-mod defaults;
 mod uri;
+mod defaults;
 
 use std::{
     io::{prelude::*, BufReader},
@@ -37,7 +37,7 @@ fn handel_connection(mut stream:TcpStream){
     };
 
     let contents = if files::file_exists(filename) {
-        files::load_contents(filename);
+        files::load_contents(filename)
     }else{
         files::load_contents(defaults::NOT_FOUND_PATH)
     };
