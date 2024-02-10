@@ -13,6 +13,13 @@ pub(crate) fn extension(filename:&str) -> &str {
     // get everything after the '.' char
     &filename[filename.rfind(".").unwrap_or(filename.len())..filename.len()]
 }
+pub(crate) fn parse(uri:&str) -> String {
+    if extension(uri)=="" {
+        uri.to_owned().clone() + &".html"
+    }else{
+        uri.parse().unwrap()
+    }
+}
 
 
 //tests

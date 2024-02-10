@@ -12,7 +12,7 @@ fn main() {
     let listener = TcpListener::bind("127.0.0.1:8081").unwrap();
     let pool = ThreadPool::new(4);
 
-    for stream in listener.incoming().take(2) {
+    for stream in listener.incoming(){
         let stream = stream.unwrap();
         pool.execute(|| {
             handel_connection(stream);
@@ -26,11 +26,14 @@ fn handel_connection(mut stream:TcpStream){
     let request_line = buf_reader.lines().next().unwrap().unwrap();
 
     let uri = uri::extract(request_line.as_str());
+    let client_addr = stream.local_addr().unwrap().ip().to_string();
+
+    println!("received request from {client_addr} asking for uri {uri}");
 
     let filename = if uri.eq("/") {
-        DEFAULT_PATH.parse().unwrap()
+        uri::find(DEFAULT_PATH)
     }else{
-        uri::find(uri)
+        uri::parse(uri::find(uri).as_str())
     };
 
     let (contents,status_line) = if files::file_exists(filename.as_str()) {
@@ -43,6 +46,8 @@ fn handel_connection(mut stream:TcpStream){
 
     let response = format!("{status_line}\r\nContent-Length:{length}\r\n\r\n{contents}");
 
-    stream.write_all(response.as_bytes()).unwrap()
+    stream.write_all(response.as_bytes()).unwrap();
+
+    println!("responded with status line {status_line}, at length {length}, with content from {filename}");
 }
 
