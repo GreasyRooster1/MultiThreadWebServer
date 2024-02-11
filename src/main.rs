@@ -23,21 +23,15 @@ fn main() {
 }
 
 fn handel_connection(mut stream:TcpStream){
+    //get the BufReader from TcpStream
     let buf_reader = BufReader::new(&mut stream);
-    let mut lines = buf_reader.lines();
-    let request_line_result =  lines.next().unwrap();
-    let request_line = match request_line_result {
-        Ok(_) => request_line_result.unwrap(),
-        Err(_) => {
-            println!("Error caused on reading from buffer");
-            "GET /404 HTTP/1.1".to_string()
-        }
-    };
+    let lines: Vec<_> = buf_reader.lines().collect::<Result<_, _>>().unwrap();
+
+    let request_line =  lines.iter().nth(0).unwrap();
 
     let uri = uri::extract(request_line.as_str());
-    //let mut client_addr = stream.local_addr().unwrap().ip().to_string();
 
-    //println!("received request from {client_addr} asking for uri {uri}");
+    println!("received request from asking for uri {uri}");
 
     let response = if actions::check_action(uri) {
         println!("executing action with identifier {uri}");

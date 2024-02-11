@@ -18,7 +18,7 @@ use crate::uri::{find, parse};
 //structs
 pub(crate) trait Action{
     fn identifier(&self)->String;
-    fn func(&self)->fn(Lines<BufReader<&mut TcpStream>>) ->String;
+    fn func(&self)->fn(Vec<String>) ->String;
 }
 
 pub(crate) fn get_registry() -> Vec<Box<dyn Action>>{
@@ -41,12 +41,15 @@ pub(crate) fn check_action(uri:&str) -> bool {
 struct Page;
 impl Action for Page {
     fn identifier(&self) -> String { "/".parse().unwrap() }
-    fn func(&self) -> fn(Lines<BufReader<&mut TcpStream>>) -> String {
+    fn func(&self) -> fn(Vec<String>) -> String {
         //creates an anonymous function for only this scope, then returns it
-        fn anon(request: Lines<BufReader<&mut TcpStream>>) -> String {
+        fn anon(request: Vec<String>) -> String {
             let mut req = request;
-            let request_line = req.next().unwrap().unwrap();
+
+            let request_line = req.iter().nth(0).unwrap();
+            println!("req {request_line}");
             let uri = uri::extract(request_line.as_str());
+
             let filename = if uri.eq("/") {
                 find(DEFAULT_PATH)
             }else{
@@ -72,9 +75,9 @@ impl Page {
 struct Sleep;
 impl Action for Sleep {
     fn identifier(&self) -> String { "/sleep".parse().unwrap() }
-    fn func(&self) -> fn(Lines<BufReader<&mut TcpStream>>) -> String {
+    fn func(&self) -> fn(Vec<String>) -> String {
         //creates an anonymous function for only this scope, then returns it
-        fn anon(_request: Lines<BufReader<&mut TcpStream>>) -> String {
+        fn anon(_request: Vec<String>) -> String {
             thread::sleep(Duration::from_secs(5));
             let contents = load_contents("index.html");
             let length = contents.len();
