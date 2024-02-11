@@ -2,7 +2,7 @@ use crate::paths::DATA_PATH;
 
 pub(crate) fn find(uri: &str) -> String {
     //this should return "data/foo.html" (or whatever else, based on the URI) and keep uri's owner the same
-    DATA_PATH.to_owned().clone() + &*uri
+    DATA_PATH.to_owned().clone() + uri
 }
 pub(crate) fn extract(http_request: &str) -> &str {
     let line = http_request.lines().next().unwrap();
@@ -15,18 +15,18 @@ pub(crate) fn extract(http_request: &str) -> &str {
 }
 pub(crate) fn extension(filename: &str) -> &str {
     // get everything after the '.' char
-    &filename[filename.rfind(".").unwrap_or(filename.len())..filename.len()]
+    &filename[filename.rfind('.').unwrap_or(filename.len())..filename.len()]
 }
 pub(crate) fn parse(uri: &str) -> String {
-    if extension(uri) == "" {
-        uri.to_owned().clone() + &".html"
+    if extension(uri).is_empty() {
+        uri.to_owned().clone() + ".html"
     } else {
         uri.parse().unwrap()
     }
 }
-pub(crate) fn create_http_response(status:String,contents:String)->String{
+pub(crate) fn create_http_response(status:String, contents: &[u8]) -> Vec<u8> {
     let len = contents.len();
-    format!("HTTP/1.1 {status}\r\nContent-Length:{len}\r\n\r\n{contents}")
+    [format!("HTTP/1.1 {status}\r\nContent-Length:{len}\r\n\r\n").as_bytes().to_owned().clone().as_slice(), contents].concat()
 }
 pub(crate) fn create_const_http(status:&str,contents:&str)->String{
     let len = contents.len();

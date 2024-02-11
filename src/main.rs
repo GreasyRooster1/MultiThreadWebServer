@@ -2,7 +2,6 @@ mod files;
 mod paths;
 mod uri;
 
-use std::ptr::copy;
 use std::{io::{prelude::*, BufReader}, net::{TcpListener, TcpStream}, thread};
 use std::time::Duration;
 use MultiThreadWebServer::ThreadPool;
@@ -43,26 +42,26 @@ fn handel_connection(mut stream: TcpStream) {
 
     let response =special_cases(uri);
 
-    stream.write_all(response.as_bytes()).unwrap();
+    stream.write_all(response.as_slice()).unwrap();
 
     println!("responded to request!");
 }
 
-fn special_cases(uri:&str)->String{
+fn special_cases(uri:&str) -> Vec<u8> {
     match uri{
         "/sleep"=>{
             thread::sleep(Duration::from_secs(5));
-            create_const_http("200 OK", "Slept for ~5 sec")
+            create_const_http("200 OK", "Slept for ~5 sec").as_bytes().to_owned()
         }
         "/sleep_long"=>{
             thread::sleep(Duration::from_secs(15));
-            create_const_http("200 OK", "Slept for ~15 sec")
+            create_const_http("200 OK", "Slept for ~15 sec").as_bytes().to_owned()
         }
         _ => { load_contents_from_uri(uri)}
     }
 }
 
-fn load_contents_from_uri(uri:&str) ->String{
+fn load_contents_from_uri(uri:&str) -> Vec<u8> {
     let filename = if uri.eq("/") {
         find(DEFAULT_PATH)
     }else{
@@ -71,7 +70,7 @@ fn load_contents_from_uri(uri:&str) ->String{
     let (contents,status) = if files::file_exists(filename.as_str()) {
         (load_contents(filename.as_str()),"200 OK")
     }else{
-        (load_contents(&paths::NOT_FOUND_PATH),"NOT FOUND")
+        (load_contents(paths::NOT_FOUND_PATH),"NOT FOUND")
     };
-    create_http_response(status.to_string(),contents)
+    create_http_response(status.to_string(),contents.as_slice())
 }
