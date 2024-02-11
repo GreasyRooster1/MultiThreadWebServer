@@ -1,8 +1,8 @@
 use std::{ptr, thread, vec};
-use std::io::{BufReader, Lines};
+use std::io::{BufRead, BufReader, Lines};
 use std::net::TcpStream;
 use std::time::Duration;
-use crate::{files, paths, uri};
+use crate::{actions, files, paths, uri};
 use crate::files::load_contents;
 use crate::paths::DEFAULT_PATH;
 use crate::uri::{find, parse};
@@ -21,33 +21,20 @@ pub(crate) trait Action{
     fn func(&self)->fn(Lines<BufReader<&mut TcpStream>>) ->String;
 }
 
-pub(crate) struct ActionRegistry;
-impl ActionRegistry{
-    pub(crate) fn get_registry() -> Vec<Box<dyn Action>>{
-        vec![Box::new(Sleep::new())]
-    }
-    pub(crate) fn default_action() -> Box<dyn Action>{
-        Box::new(Page::new())
-    }
+pub(crate) fn get_registry() -> Vec<Box<dyn Action>>{
+    vec![Box::new(Sleep::new())]
 }
-
+pub(crate) fn default_action() -> Box<dyn Action>{
+    Box::new(Page::new())
+}
 //Helper functions
 pub(crate) fn check_action(uri:&str) -> bool {
-    for action in ActionRegistry::get_registry().iter(){
+    for action in get_registry().iter(){
         if action.identifier().eq(uri){
             return true
         }
     }
     false
-}
-
-pub(crate) fn get_action(uri:&str) ->Box<dyn Action> {
-    for action in ActionRegistry::get_registry().iter(){
-        if action.identifier().eq(uri){
-            return action
-        }
-    }
-    ActionRegistry::default_action()
 }
 
 //Actions
