@@ -30,36 +30,36 @@ fn main() {
 fn handel_connection(mut stream: TcpStream) {
     //get the BufReader from TcpStream
     let buf_reader = BufReader::new(&mut stream);
-    let lines: Vec<_> = buf_reader.lines().collect::<Result<_, _>>().unwrap();
 
-    let request_line =lines[0].clone();
+    let request_line_result = buf_reader.lines().next().unwrap();
+    let request_line = match request_line_result {
+        Ok(_) => request_line_result.unwrap(),
+        Err(_) => {
+            println!("Error caused on reading from buffer");
+            "GET /404 HTTP/1.1".to_string()
+        }
+    };
 
     let uri = uri::extract(request_line.as_str());
+    let client_addr = stream.local_addr().unwrap().ip().to_string();
 
-    println!("received request from asking for uri {uri}");
-
-    //let mut req = request;
-
-    let request_line = lines.iter().nth(0).unwrap();
-    println!("req {request_line}");
-    let uri = uri::extract(request_line.as_str());
+    println!("received request from {client_addr} asking for uri {uri}");
 
     let filename = if uri.eq("/") {
-        find(DEFAULT_PATH)
-    } else {
-        parse(find(uri).as_str())
+        uri::find(DEFAULT_PATH)
+    }else{
+        uri::parse(uri::find(uri).as_str())
     };
-    let (contents, status_line) = if files::file_exists(filename.as_str()) {
-        (load_contents(filename.as_str()), "HTTP/1.1 200 OK")
-    } else {
-        (
-            load_contents(&paths::NOT_FOUND_PATH),
-            "HTTP/1.1 404 NOT FOUND",
-        )
+    let (contents,status_line) = if files::file_exists(filename.as_str()) {
+        (files::load_contents(filename.as_str()),"HTTP/1.1 200 OK")
+    }else{
+        (files::load_contents(&paths::NOT_FOUND_PATH),"HTTP/1.1 404 NOT FOUND")
     };
+
     let length = contents.len();
     let response = format!("{status_line}\r\nContent-Length:{length}\r\n\r\n{contents}");
 
     stream.write_all(response.as_bytes()).unwrap();
-    println!("stream was written to, connection handel completed");
+
+    println!("responded with status line {status_line}, at length {length}, with content from {filename}");
 }
