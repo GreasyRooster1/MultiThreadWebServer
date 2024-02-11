@@ -1,6 +1,11 @@
-use std::thread;
+use std::{ptr, thread, vec};
+use std::io::{BufReader, Lines};
+use std::net::TcpStream;
 use std::time::Duration;
+use crate::{files, paths, uri};
 use crate::files::load_contents;
+use crate::paths::DEFAULT_PATH;
+use crate::uri::{find, parse};
 
 //--FOR FUTURE REFERENCE--
 //when making methods, using &self as a parameter makes the method non-static
@@ -9,9 +14,11 @@ use crate::files::load_contents;
 //and non-static structs need a ::new() method, as rust doesnt have an equivalent to "new" in java
 //thanks to Iris for helping me out with this lol
 
+
+//structs
 pub(crate) trait Action{
     fn identifier(&self)->String;
-    fn func(&self)->fn(&str) ->String;
+    fn func(&self)->fn(Lines<BufReader<&mut TcpStream>>) ->String;
 }
 
 pub(crate) struct ActionRegistry;
@@ -19,16 +26,68 @@ impl ActionRegistry{
     pub(crate) fn get_registry() -> Vec<Box<dyn Action>>{
         vec![Box::new(Sleep::new())]
     }
+    pub(crate) fn default_action() -> Box<dyn Action>{
+        Box::new(Page::new())
+    }
 }
 
+//Helper functions
+pub(crate) fn check_action(uri:&str) -> bool {
+    for action in ActionRegistry::get_registry().iter(){
+        if action.identifier().eq(uri){
+            return true
+        }
+    }
+    false
+}
+
+pub(crate) fn get_action(uri:&str) ->Box<dyn Action> {
+    for action in ActionRegistry::get_registry().iter(){
+        if action.identifier().eq(uri){
+            return action
+        }
+    }
+    ActionRegistry::default_action()
+}
 
 //Actions
+struct Page;
+impl Action for Page {
+    fn identifier(&self) -> String { "/".parse().unwrap() }
+    fn func(&self) -> fn(Lines<BufReader<&mut TcpStream>>) -> String {
+        //creates an anonymous function for only this scope, then returns it
+        fn anon(request: Lines<BufReader<&mut TcpStream>>) -> String {
+            let mut req = request;
+            let request_line = req.next().unwrap().unwrap();
+            let uri = uri::extract(request_line.as_str());
+            let filename = if uri.eq("/") {
+                find(DEFAULT_PATH)
+            }else{
+                parse(find(uri).as_str())
+            };
+            let (contents,status_line) = if files::file_exists(filename.as_str()) {
+                (load_contents(filename.as_str()),"HTTP/1.1 200 OK")
+            }else{
+                (load_contents(&paths::NOT_FOUND_PATH),"HTTP/1.1 404 NOT FOUND")
+            };
+            let length = contents.len();
+            format!("{status_line}\r\nContent-Length:{length}\r\n\r\n{contents}")
+        }
+        anon
+    }
+}
+impl Page {
+    fn new()->Self{
+        Page{}
+    }
+}
+
 struct Sleep;
 impl Action for Sleep {
-    fn identifier(&self) -> String { "sleep".parse().unwrap() }
-    fn func(&self) -> fn(&str) -> String {
+    fn identifier(&self) -> String { "/sleep".parse().unwrap() }
+    fn func(&self) -> fn(Lines<BufReader<&mut TcpStream>>) -> String {
         //creates an anonymous function for only this scope, then returns it
-        fn anon(_request: &str) -> String {
+        fn anon(_request: Lines<BufReader<&mut TcpStream>>) -> String {
             thread::sleep(Duration::from_secs(5));
             let contents = load_contents("index.html");
             let length = contents.len();
