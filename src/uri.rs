@@ -7,20 +7,23 @@ pub(crate) fn find(uri: &str) -> String {
 pub(crate) fn extract(http_request: &str) -> &str {
     let line = http_request.lines().next().unwrap();
     // return uri (remove GET prefix and HTTP/1.1 suffix)
-    line.strip_prefix("GET").unwrap().strip_suffix("HTTP/1.1").unwrap().trim()
+    line.strip_prefix("GET")
+        .unwrap()
+        .strip_suffix("HTTP/1.1")
+        .unwrap()
+        .trim()
 }
-pub(crate) fn extension(filename:&str) -> &str {
+pub(crate) fn extension(filename: &str) -> &str {
     // get everything after the '.' char
     &filename[filename.rfind(".").unwrap_or(filename.len())..filename.len()]
 }
-pub(crate) fn parse(uri:&str) -> String {
-    if extension(uri)=="" {
+pub(crate) fn parse(uri: &str) -> String {
+    if extension(uri) == "" {
         uri.to_owned().clone() + &".html"
-    }else{
+    } else {
         uri.parse().unwrap()
     }
 }
-
 
 //tests
 #[cfg(test)]
@@ -32,16 +35,16 @@ mod tests {
         assert_eq!(uri::find("/foo/bar.html"), "data/foo/bar.html");
         assert_eq!(uri::find("/"), "data/");
 
-        let uri :&str = "/index.html";
+        let uri: &str = "/index.html";
         assert_eq!(uri::find(uri), "data/index.html");
-        assert_eq!(uri,"/index.html");
+        assert_eq!(uri, "/index.html");
 
-        let mut uri_mut :&str = "/foo.html";
+        let mut uri_mut: &str = "/foo.html";
         assert_eq!(uri::find(uri_mut), "data/foo.html");
-        assert_eq!(uri_mut,"/foo.html");
+        assert_eq!(uri_mut, "/foo.html");
         uri_mut = "/bar.html";
         assert_eq!(uri::find(uri_mut), "data/bar.html");
-        assert_eq!(uri_mut,"/bar.html");
+        assert_eq!(uri_mut, "/bar.html");
     }
     #[test]
     fn extract() {
@@ -51,10 +54,10 @@ mod tests {
         assert_eq!(uri::extract("GET /GET/HTTP/1.1 HTTP/1.1"), "/GET/HTTP/1.1");
     }
     #[test]
-    fn extension(){
-        assert_eq!(uri::extension("index.html"),".html");
-        assert_eq!(uri::extension("script.js"),".js");
-        assert_eq!(uri::extension("no-extension"),"");
-        assert_eq!(uri::extension("mult.aple.ext.ensio.ns.html"),".html");
+    fn extension() {
+        assert_eq!(uri::extension("index.html"), ".html");
+        assert_eq!(uri::extension("script.js"), ".js");
+        assert_eq!(uri::extension("no-extension"), "");
+        assert_eq!(uri::extension("mult.aple.ext.ensio.ns.html"), ".html");
     }
 }
