@@ -8,7 +8,7 @@ use std::time::Duration;
 use MultiThreadWebServer::ThreadPool;
 use crate::files::load_contents;
 use crate::paths::DEFAULT_PATH;
-use crate::uri::{find, parse};
+use crate::uri::{create_const_http, create_http_response, find, parse};
 
 fn main() {
     let listener = TcpListener::bind("127.0.0.1:8081").unwrap();
@@ -52,11 +52,11 @@ fn special_cases(uri:&str)->String{
     match uri{
         "/sleep"=>{
             thread::sleep(Duration::from_secs(5));
-            load_contents_from_uri(&DEFAULT_PATH)
+            create_const_http("200 OK", "Slept for ~5 sec")
         }
         "/sleep_long"=>{
             thread::sleep(Duration::from_secs(15));
-            load_contents_from_uri(&DEFAULT_PATH)
+            create_const_http("200 OK", "Slept for ~15 sec")
         }
         _ => { load_contents_from_uri(uri)}
     }
@@ -68,11 +68,10 @@ fn load_contents_from_uri(uri:&str) ->String{
     }else{
         parse(find(uri).as_str())
     };
-    let (contents,status_line) = if files::file_exists(filename.as_str()) {
-        (load_contents(filename.as_str()),"HTTP/1.1 200 OK")
+    let (contents,status) = if files::file_exists(filename.as_str()) {
+        (load_contents(filename.as_str()),"200 OK")
     }else{
-        (load_contents(&paths::NOT_FOUND_PATH),"HTTP/1.1 404 NOT FOUND")
+        (load_contents(&paths::NOT_FOUND_PATH),"NOT FOUND")
     };
-    let length = contents.len();
-    format!("HTTP/1.1 200 OK\r\nContent-Length:{length}\r\n\r\n{contents}")
+    create_http_response(status.to_string(),contents)
 }

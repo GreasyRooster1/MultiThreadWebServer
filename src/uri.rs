@@ -26,7 +26,11 @@ pub(crate) fn parse(uri: &str) -> String {
 }
 pub(crate) fn create_http_response(status:String,contents:String)->String{
     let len = contents.len();
-    format!("HTTP/1.1 {status}\r\nContent-Length:{length}\r\n\r\n{contents}")
+    format!("HTTP/1.1 {status}\r\nContent-Length:{len}\r\n\r\n{contents}")
+}
+pub(crate) fn create_const_http(status:&str,contents:&str)->String{
+    let len = contents.len();
+    format!("HTTP/1.1 {status}\r\nContent-Length:{len}\r\n\r\n{contents}")
 }
 
 //tests
