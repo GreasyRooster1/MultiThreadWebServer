@@ -24,6 +24,10 @@ pub(crate) fn parse(uri: &str) -> String {
         uri.parse().unwrap()
     }
 }
+pub(crate) fn create_http_response(status:String,contents:String)->String{
+    let len = contents.len();
+    format!("HTTP/1.1 {status}\r\nContent-Length:{length}\r\n\r\n{contents}")
+}
 
 //tests
 #[cfg(test)]

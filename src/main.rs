@@ -1,15 +1,11 @@
-mod actions;
 mod files;
 mod paths;
 mod uri;
 
 use std::ptr::copy;
-use std::{
-    io::{prelude::*, BufReader},
-    net::{TcpListener, TcpStream},
-};
+use std::{io::{prelude::*, BufReader}, net::{TcpListener, TcpStream}, thread};
+use std::time::Duration;
 use MultiThreadWebServer::ThreadPool;
-use crate::actions::load_page;
 use crate::files::load_contents;
 use crate::paths::DEFAULT_PATH;
 use crate::uri::{find, parse};
@@ -45,21 +41,38 @@ fn handel_connection(mut stream: TcpStream) {
 
     println!("received request from {client_addr} asking for uri {uri}");
 
-    let filename = if uri.eq("/") {
-        uri::find(DEFAULT_PATH)
-    }else{
-        uri::parse(uri::find(uri).as_str())
-    };
-    let (contents,status_line) = if files::file_exists(filename.as_str()) {
-        (files::load_contents(filename.as_str()),"HTTP/1.1 200 OK")
-    }else{
-        (files::load_contents(&paths::NOT_FOUND_PATH),"HTTP/1.1 404 NOT FOUND")
-    };
-
-    let length = contents.len();
-    let response = format!("{status_line}\r\nContent-Length:{length}\r\n\r\n{contents}");
+    let response =special_cases(uri);
 
     stream.write_all(response.as_bytes()).unwrap();
 
-    println!("responded with status line {status_line}, at length {length}, with content from {filename}");
+    println!("responded to request!");
+}
+
+fn special_cases(uri:&str)->String{
+    match uri{
+        "/sleep"=>{
+            thread::sleep(Duration::from_secs(5));
+            load_contents_from_uri(&DEFAULT_PATH)
+        }
+        "/sleep_long"=>{
+            thread::sleep(Duration::from_secs(15));
+            load_contents_from_uri(&DEFAULT_PATH)
+        }
+        _ => { load_contents_from_uri(uri)}
+    }
+}
+
+fn load_contents_from_uri(uri:&str) ->String{
+    let filename = if uri.eq("/") {
+        find(DEFAULT_PATH)
+    }else{
+        parse(find(uri).as_str())
+    };
+    let (contents,status_line) = if files::file_exists(filename.as_str()) {
+        (load_contents(filename.as_str()),"HTTP/1.1 200 OK")
+    }else{
+        (load_contents(&paths::NOT_FOUND_PATH),"HTTP/1.1 404 NOT FOUND")
+    };
+    let length = contents.len();
+    format!("HTTP/1.1 200 OK\r\nContent-Length:{length}\r\n\r\n{contents}")
 }
