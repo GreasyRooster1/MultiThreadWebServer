@@ -5,7 +5,7 @@ mod actions;
 
 use std::{io::{prelude::*, BufReader}, net::{TcpListener, TcpStream}};
 use MultiThreadWebServer::ThreadPool;
-use crate::actions::{ActionRegistry, Registry};
+use crate::actions::ActionRegistry;
 use crate::paths::DEFAULT_PATH;
 use crate::uri::{find, parse};
 
