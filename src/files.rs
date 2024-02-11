@@ -9,7 +9,3 @@ pub fn file_exists(filename: &str) -> bool {
 pub fn load_contents(file_name: &str) -> String {
     fs::read_to_string(file_name).unwrap()
 }
-
-pub fn craft_response()-> String{
-
-}

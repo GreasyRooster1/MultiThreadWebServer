@@ -5,13 +5,14 @@ mod actions;
 
 use std::{io::{prelude::*, BufReader}, net::{TcpListener, TcpStream}};
 use MultiThreadWebServer::ThreadPool;
+use crate::actions::{ActionRegistry, Registry};
 use crate::paths::DEFAULT_PATH;
 use crate::uri::{find, parse};
 
 fn main() {
     let listener = TcpListener::bind("127.0.0.1:8081").unwrap();
     let pool = ThreadPool::new(4);
-    let action_registry = ActionRegistry();
+    let action_registry = ActionRegistry::get_registry();
 
     for stream in listener.incoming(){
         let stream = stream.unwrap();

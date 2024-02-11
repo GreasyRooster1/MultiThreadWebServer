@@ -1,5 +1,3 @@
-use std::io::BufReader;
-use std::net::TcpStream;
 use std::thread;
 use std::time::Duration;
 use crate::files::load_contents;
@@ -8,15 +6,13 @@ trait Action{
     fn identifier()->String;
     fn func()->fn(&str) ->String;
 }
-trait Registry{
-    fn get_registry(){
-
-    }
+pub(crate) trait Registry{
+    fn get_registry() -> Vec<Box<dyn Action>>;
 }
-struct ActionRegistry();
+pub(crate) struct ActionRegistry();
 impl Registry for ActionRegistry{
-    fn get_registry() -> Vec<dyn Action>{
-        vec![Sleep::new()]
+    fn get_registry() -> Vec<Box<dyn Action>>{
+        vec![Box::new(Sleep::new())]
     }
 }
 
