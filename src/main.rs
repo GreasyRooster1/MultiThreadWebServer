@@ -3,13 +3,16 @@ mod files;
 mod paths;
 mod uri;
 
-use crate::actions::{get_registry, Action};
 use std::ptr::copy;
 use std::{
     io::{prelude::*, BufReader},
     net::{TcpListener, TcpStream},
 };
 use MultiThreadWebServer::ThreadPool;
+use crate::actions::load_page;
+use crate::files::load_contents;
+use crate::paths::DEFAULT_PATH;
+use crate::uri::{find, parse};
 
 fn main() {
     let listener = TcpListener::bind("127.0.0.1:8081").unwrap();
@@ -35,17 +38,27 @@ fn handel_connection(mut stream: TcpStream) {
 
     println!("received request from asking for uri {uri}");
 
-    let response = if actions::check_action(uri) {
-        println!("executing action with identifier {uri}");
-        get_registry()
-            .iter()
-            .find(|&x| x.identifier() == uri)
-            .unwrap()
-            .func()(lines)
+    //let mut req = request;
+
+    let request_line = lines.iter().nth(0).unwrap();
+    println!("req {request_line}");
+    let uri = uri::extract(request_line.as_str());
+
+    let filename = if uri.eq("/") {
+        find(DEFAULT_PATH)
     } else {
-        println!("no action was specified, executing default");
-        actions::default_action().func()(lines)
+        parse(find(uri).as_str())
     };
+    let (contents, status_line) = if files::file_exists(filename.as_str()) {
+        (load_contents(filename.as_str()), "HTTP/1.1 200 OK")
+    } else {
+        (
+            load_contents(&paths::NOT_FOUND_PATH),
+            "HTTP/1.1 404 NOT FOUND",
+        )
+    };
+    let length = contents.len();
+    let response = format!("{status_line}\r\nContent-Length:{length}\r\n\r\n{contents}");
 
     stream.write_all(response.as_bytes()).unwrap();
     println!("stream was written to, connection handel completed");
