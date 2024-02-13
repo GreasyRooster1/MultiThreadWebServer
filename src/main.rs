@@ -10,7 +10,7 @@ use crate::paths::DEFAULT_PATH;
 use crate::uri::{create_const_http, create_http_response, find, parse};
 
 fn main() {
-    let listener = TcpListener::bind("127.0.0.1:8081").unwrap();
+    let listener = TcpListener::bind("0.0.0.0:8081").unwrap();
     let pool = ThreadPool::new(4);
 
     for stream in listener.incoming() {
