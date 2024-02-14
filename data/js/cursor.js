@@ -3,6 +3,7 @@ const circleElement = document.querySelector(".circle");
 const mouse = {x:0,y:0};
 const previousMouse = {x:0,y:0};
 const circle = {x:0,y:0};
+const previousCircle = {x:0,y:0};
 let currentScale = 0;
 let currentAngle = 0;
 
@@ -33,7 +34,11 @@ const tick = ()=>{
     const scaleTransform = `scale(${1+currentScale}, ${1-currentScale})`;
 
     //rotate
-    const angle = Math.atan2(deltaMouseY,deltaMouseX)*180 /Math.PI;
+    const deltaCircleX = circle.x-previousCircle.x;
+    const deltaCircleY = circle.y-previousCircle.y;
+    previousCircle.x = circle.x;
+    previousCircle.y = circle.y;
+    const angle = Math.atan2(deltaCircleY,deltaCircleX)*180 /Math.PI;
 
     if(mouseVel>20){
         currentAngle = angle;
