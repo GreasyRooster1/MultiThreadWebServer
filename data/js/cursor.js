@@ -26,7 +26,7 @@ const tick = ()=>{
     previousMouse.x = mouse.x;
     previousMouse.y = mouse.y;
 
-    const mouseVel = Math.min(Math.sqrt(deltaMouseX**2,deltaMouseY**2)*4,150);
+    const mouseVel = Math.min(Math.sqrt(deltaMouseX**2+deltaMouseY**2)*4,150);
     const scaleValue = (mouseVel/150)*0.5
 
     currentScale +=(scaleValue-currentScale)*speed;
