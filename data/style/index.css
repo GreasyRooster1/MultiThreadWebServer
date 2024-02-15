@@ -1,0 +1,27 @@
+:root {
+    --mouse-x: 50%;
+    --mouse-y: 50%;
+    --mask-size:40px;
+}
+#github-title{
+    position: absolute;
+    top:0;
+    left: 2%;
+}
+#github-item{
+    overflow: hidden;
+    position: relative;
+}
+#github-image{
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    mask: radial-gradient(
+            circle at var(--mouse-x) var(--mouse-y),
+            black var(--mask-size),
+            rgba(0, 0, 0, 0.08) var(--mask-size)
+
+    );
+}

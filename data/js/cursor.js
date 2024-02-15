@@ -13,9 +13,13 @@ let expandAnimInterval;
 let shrinkAnimFrame = 0;
 let shrinkAnimInterval;
 
+const mask = document.querySelector('#github-item');
+
+//movement
 window.addEventListener("mousemove",(e) => {
     mouse.x = e.x;
     mouse.y = e.y;
+
 })
 
 const speed = 0.17;
@@ -55,11 +59,18 @@ const tick = ()=>{
     //apply transforms
     circleElement.style.transform = `${translateTransform} ${rotateTransform} ${scaleTransform}`;
 
+    //apply masks
+    let viewportOffset = mask.getBoundingClientRect();
+    mask.style.setProperty('--mouse-x', (circle.x-viewportOffset.left) + 'px');
+    mask.style.setProperty('--mouse-y', (circle.y-viewportOffset.top) + 'px');
+    mask.style.setProperty('--mask-size', (circle.size*20) + 'px');
+
     window.requestAnimationFrame(tick);
 }
 
 tick();
 
+//animation
 githubElement.addEventListener("mouseenter", (event) => {
     clearInterval(shrinkAnimInterval);
     shrinkAnimFrame=0;
