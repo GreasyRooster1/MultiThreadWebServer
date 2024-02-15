@@ -1,0 +1,50 @@
+:root{
+    --background-dark: #222025;
+    --cursor: #a592c4;
+    --background-med: #373546;
+    --text-block: #7c67d9;
+}
+
+body{
+    background: var(--background-dark);
+}
+
+.center {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%,-50%);
+    width: fit-content;
+}
+.grid-container {
+    display: grid;
+    gap: 50px 50px;
+    align-content: center;
+    grid-template-columns: 1fr 1fr;
+}
+.grid-item{
+    background: var(--background-med);
+    width: 33vmin;
+    height: 33vmin;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.block-text{
+    color: var(--text-block);
+    font-family: "Redex Pro", sans-serif;
+    font-weight: 900;
+    font-size: xxx-large;
+    margin:0;
+}
+
+.center-text{
+    text-align: center;
+}
+.left-text{
+    text-align: left;
+}
+.right-text{
+    text-align: right;
+}
