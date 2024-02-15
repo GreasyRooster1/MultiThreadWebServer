@@ -9,22 +9,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght,HEXP@700,0..100&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="style/cursor.css"/>
     <link rel="stylesheet" type="text/css" href="style/base.css"/>
+
+    <script src="js/util.js" defer></script>
+    <script src="js/cursor.js" defer></script>
 </head>
 <body>
     <div class="circle"></div>
-    <script src="js/cursor.js"></script>
 
     <div class="center grid-container">
-        <div class="grid-item">
-            <p class="block-text center-text">Big Block Text</p>
+        <div class="grid-item" id="title-item">
+            <p class="block-text-xl center-text">Rust Web Server</p>
+            <p class="minor-text bottom">V1.0</p>
         </div>
-        <div class="grid-item">
+        <div class="grid-item" id="foo-item">
             <p class="block-text left-text">Foo</p>
         </div>
-        <div class="grid-item">
+        <div class="grid-item" id="bar-item">
             <p class="block-text left-text">Bar</p>
         </div>
-        <div class="grid-item">
+        <div class="grid-item" id="github-item">
             <p class="block-text right-text">Github</p>
         </div>
     </div>
