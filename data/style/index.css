@@ -7,6 +7,7 @@
     position: absolute;
     top:0;
     left: 2%;
+    animation: gi;
 }
 #github-item{
     overflow: hidden;
@@ -24,4 +25,9 @@
             rgba(0, 0, 0, 0.08) var(--mask-size)
 
     );
+}
+
+@keyframes github-colors {
+    0%   {color: var(--text-block);}
+    100% {color: var(--text-block-high);}
 }

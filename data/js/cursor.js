@@ -72,6 +72,9 @@ tick();
 
 //animation
 githubElement.addEventListener("mouseenter", (event) => {
+    githubElement.children.namedItem("github-title").style.animation = "3s ease-in 1s 1 normal both running github-colors"
+
+    //animate circle
     clearInterval(shrinkAnimInterval);
     shrinkAnimFrame=0;
     if(!expandAnimFrame) {
@@ -87,6 +90,9 @@ githubElement.addEventListener("mouseenter", (event) => {
     }
 });
 githubElement.addEventListener("mouseleave", (event) => {
+    githubElement.children.namedItem("github-title").style.animation = "3s ease-in 1s 1 reverse both running github-colors"
+
+    //animate circle
     clearInterval(expandAnimInterval);
     expandAnimFrame = 0;
     if(!shrinkAnimFrame) {
