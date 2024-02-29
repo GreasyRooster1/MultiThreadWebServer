@@ -7,7 +7,7 @@
     position: absolute;
     top:0;
     left: 2%;
-    animation: gi;
+    transition:0.5s
 }
 #github-item{
     overflow: hidden;
@@ -27,7 +27,6 @@
     );
 }
 
-@keyframes github-colors {
-    0%   {color: var(--text-block);}
-    100% {color: var(--text-block-high);}
+#github-item:hover #github-title {
+    color: var(--text-block-high);
 }

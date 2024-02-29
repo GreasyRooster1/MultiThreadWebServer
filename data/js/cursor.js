@@ -72,7 +72,6 @@ tick();
 
 //animation
 githubElement.addEventListener("mouseenter", (event) => {
-    githubElement.children.namedItem("github-title").style.animation = "3s ease-in 1s 1 normal both running github-colors"
 
     //animate circle
     clearInterval(shrinkAnimInterval);
@@ -81,7 +80,7 @@ githubElement.addEventListener("mouseenter", (event) => {
         expandAnimInterval = setInterval(() => {
             expandAnimFrame++;
             let maxSize = 10;
-            circle.size+=Math.abs(circle.size-maxSize)/20;
+            circle.size+=Math.abs(circle.size-maxSize)/20
             if (expandAnimFrame >= 100) {
                 expandAnimFrame = 0;
                 clearInterval(expandAnimInterval);
@@ -90,7 +89,6 @@ githubElement.addEventListener("mouseenter", (event) => {
     }
 });
 githubElement.addEventListener("mouseleave", (event) => {
-    githubElement.children.namedItem("github-title").style.animation = "3s ease-in 1s 1 reverse both running github-colors"
 
     //animate circle
     clearInterval(expandAnimInterval);
@@ -98,7 +96,7 @@ githubElement.addEventListener("mouseleave", (event) => {
     if(!shrinkAnimFrame) {
         shrinkAnimInterval = setInterval(() => {
             shrinkAnimFrame++;
-            circle.size-=Math.abs(circle.size-1)/20;
+            circle.size-=Math.abs(circle.size-1)/20
             if (shrinkAnimFrame >= 100) {
                 shrinkAnimFrame = 0;
                 clearInterval(shrinkAnimInterval);
