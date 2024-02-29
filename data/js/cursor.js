@@ -13,7 +13,7 @@ let expandAnimInterval;
 let shrinkAnimFrame = 0;
 let shrinkAnimInterval;
 
-const mask = document.querySelector('#github-item');
+const mask = document.querySelector('#github-mask');
 
 //movement
 window.addEventListener("mousemove",(e) => {

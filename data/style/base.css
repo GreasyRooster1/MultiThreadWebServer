@@ -1,10 +1,16 @@
 :root{
     --background-dark: #222025;
-    --cursor: #a592c4;
     --background-med: #373546;
+
+    --cursor: #a592c4;
+
     --text-block: #7c67d9;
-    --text-minor: #9b8eb6;
     --text-block-high: #ebb3ff;
+    --text-minor: #9b8eb6;
+    --text-paragraph: #cbc1ea;
+
+
+    --github-mask-high: #aa62c2;
 }
 
 body{
@@ -71,6 +77,13 @@ body{
     font-family: "Redex Pro", sans-serif;
     font-weight: 70;
     font-size: 0.9em;
+}
+
+.paragraph-text{
+    color: var(--text-paragraph);
+    font-family: "Redex Pro", sans-serif;
+    font-weight: 175;
+    font-size: 1em;
 }
 
 

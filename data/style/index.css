@@ -3,15 +3,18 @@
     --mouse-y: 50%;
     --mask-size:40px;
 }
+
+#github-item{
+    overflow: hidden;
+    position: relative;
+    background: var(--background-med);
+    transition:0.5s;
+}
 #github-title{
     position: absolute;
     top:0;
     left: 2%;
-    transition:0.5s
-}
-#github-item{
-    overflow: hidden;
-    position: relative;
+    transition:0.5s;
 }
 #github-image{
     position: absolute;
@@ -19,14 +22,28 @@
     left: 0;
     width: 100%;
     height: 100%;
+    transition:0.5s
+}
+#github-mask {
+    background: var(--background-med);
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
     mask: radial-gradient(
             circle at var(--mouse-x) var(--mouse-y),
-            black var(--mask-size),
-            rgba(0, 0, 0, 0.08) var(--mask-size)
-
+            rgba(0, 0, 0, 0.08) var(--mask-size),
+            rgba(0, 0, 0, 0.7) var(--mask-size)
     );
 }
 
 #github-item:hover #github-title {
     color: var(--text-block-high);
+}
+#github-item:hover #github-image {
+    top:-5%;
+    left:-5%;
+    width:110%;
+    height:110%;
 }
