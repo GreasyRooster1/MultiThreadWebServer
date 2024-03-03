@@ -1,11 +1,13 @@
 mod files;
 mod paths;
 mod uri;
+mod actions;
 
 use std::{io::{prelude::*, BufReader}, net::{TcpListener, TcpStream}, thread};
 use std::time::Duration;
 use log::{error, warn};
 use MultiThreadWebServer::ThreadPool;
+use crate::actions::special_cases;
 use crate::files::load_contents;
 use crate::paths::DEFAULT_PATH;
 use crate::uri::{create_const_http, create_http_response, find, parse};
@@ -54,19 +56,7 @@ fn handel_connection(mut stream: TcpStream) {
     println!("responded to request!");
 }
 
-fn special_cases(uri:&str) -> Vec<u8> {
-    match uri{
-        "/sleep"=>{
-            thread::sleep(Duration::from_secs(5));
-            create_const_http("200 OK", "Slept for ~5 sec").as_bytes().to_owned()
-        }
-        "/sleep_long"=>{
-            thread::sleep(Duration::from_secs(15));
-            create_const_http("200 OK", "Slept for ~15 sec").as_bytes().to_owned()
-        }
-        _ => { load_contents_from_uri(uri)}
-    }
-}
+
 
 fn load_contents_from_uri(uri:&str) -> Vec<u8> {
     let filename = if uri.eq("/") {
