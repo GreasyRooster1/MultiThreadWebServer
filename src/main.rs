@@ -10,7 +10,7 @@ use MultiThreadWebServer::ThreadPool;
 use crate::actions::special_cases;
 use crate::files::load_contents;
 use crate::paths::DEFAULT_PATH;
-use crate::uri::{create_const_http, create_http_response, find, HTTPResponse, parse};
+use crate::uri::*;
 
 fn main() {
     let listener = TcpListener::bind("0.0.0.0:8081").unwrap();
