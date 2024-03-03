@@ -16,7 +16,10 @@ const expandObjects = [
     document.getElementById("github-item"),
     document.getElementById("title-item"),
 ]
-const maskObjects =  document.getElementsByClassName("mask");
+const maskObjects = [
+    document.getElementById("github-mask"),
+    document.getElementById("title-mask"),
+]
 
 const mask = document.querySelector('#github-mask');
 
@@ -65,11 +68,12 @@ const tick = ()=>{
     circleElement.style.transform = `${translateTransform} ${rotateTransform} ${scaleTransform}`;
 
     //apply masks
-    let viewportOffset = mask.getBoundingClientRect();
+
     for(let i=0;i<maskObjects.length;i++) {
-        mask.style.setProperty('--mouse-x', (circle.x - viewportOffset.left) + 'px');
-        mask.style.setProperty('--mouse-y', (circle.y - viewportOffset.top) + 'px');
-        mask.style.setProperty('--mask-size', (circle.size * 20) + 'px');
+        let viewportOffset = maskObjects[i].getBoundingClientRect();
+        maskObjects[i].style.setProperty('--mouse-x', (circle.x - viewportOffset.left) + 'px');
+        maskObjects[i].style.setProperty('--mouse-y', (circle.y - viewportOffset.top) + 'px');
+        maskObjects[i].style.setProperty('--mask-size', (circle.size * 20) + 'px');
     }
 
     window.requestAnimationFrame(tick);

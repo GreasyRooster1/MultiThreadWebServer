@@ -1,6 +1,7 @@
 :root{
     --background-dark: #222025;
     --background-med: #373546;
+    --background-med-faded: rgba(71, 68, 89, 0.58);
 
     --cursor: #a592c4;
 

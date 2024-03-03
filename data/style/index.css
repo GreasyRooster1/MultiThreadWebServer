@@ -51,7 +51,21 @@
     overflow: hidden;
     position: relative;
 }
-#title-text{
+#title{
+    z-index: 100;
+    line-height: 1;
+}
+#version{
+    z-index: 100;
+}
+#title-paragraph{
+    display: block;
+    position: absolute;
+    top: 60%;
+    right: 50%;
+    transform: translate(50%,-50%);
+    width: 75%;
+    text-indent: 4ch;
 }
 #title-mask{
     background: var(--background-med);
@@ -65,4 +79,8 @@
             rgba(0, 0, 0, 0) var(--mask-size),
             rgba(0, 0, 0, 1) var(--mask-size)
     );
+    transition: 0.5s;
+}
+#title-item:hover #title-mask{
+    background: var(--background-med-faded);
 }
