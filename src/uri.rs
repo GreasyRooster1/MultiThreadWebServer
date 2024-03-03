@@ -1,8 +1,12 @@
-use crate::paths::DATA_PATH;
+use crate::paths::{DATA_PATH, HIDDEN_PATH};
 
 pub(crate) fn find(uri: &str) -> String {
     //this should return "data/foo.html" (or whatever else, based on the URI) and keep uri's owner the same
     DATA_PATH.to_owned().clone() + uri
+}
+pub(crate) fn find_hidden(uri: &str) -> String {
+    //this should return "hidden/foo.html" (or whatever else, based on the URI) and keep uri's owner the same
+    HIDDEN_PATH.to_owned().clone() + uri
 }
 pub(crate) fn extract(http_request: &str) -> &str {
     let line = http_request.lines().next().unwrap();
