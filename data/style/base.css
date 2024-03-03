@@ -1,8 +1,17 @@
 :root{
     --background-dark: #222025;
-    --cursor: #a592c4;
     --background-med: #373546;
+    --background-med-faded: rgba(71, 68, 89, 0.58);
+
+    --cursor: #a592c4;
+
     --text-block: #7c67d9;
+    --text-block-high: #ebb3ff;
+    --text-minor: #9b8eb6;
+    --text-paragraph: #cbc1ea;
+
+
+    --github-mask-high: #aa62c2;
 }
 
 body{
@@ -17,6 +26,23 @@ body{
     transform: translate(50%,-50%);
     width: fit-content;
 }
+.bottom{
+    margin-top: 100%;
+    position: absolute;
+    align-self: flex-end;
+}
+
+.center-text{
+    text-align: center;
+}
+.left-text{
+    text-align: left;
+}
+.right-text{
+    text-align: right;
+}
+
+
 .grid-container {
     display: grid;
     gap: 50px 50px;
@@ -29,7 +55,9 @@ body{
     height: 33vmin;
     padding: 20px;
     border-radius: 10px;
+    display:flex;
 }
+
 
 .block-text{
     color: var(--text-block);
@@ -38,13 +66,25 @@ body{
     font-size: xxx-large;
     margin:0;
 }
+.block-text-xl{
+    color: var(--text-block);
+    font-family: "Redex Pro", sans-serif;
+    font-weight: 900;
+    font-size: 5em;
+    margin:0;
+}
+.minor-text{
+    color: var(--text-minor);
+    font-family: "Redex Pro", sans-serif;
+    font-weight: 70;
+    font-size: 0.9em;
+}
 
-.center-text{
-    text-align: center;
+.paragraph-text{
+    color: var(--text-paragraph);
+    font-family: "Redex Pro", sans-serif;
+    font-weight: 175;
+    font-size: 1em;
 }
-.left-text{
-    text-align: left;
-}
-.right-text{
-    text-align: right;
-}
+
+

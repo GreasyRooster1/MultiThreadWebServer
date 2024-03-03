@@ -9,23 +9,33 @@
     <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght,HEXP@700,0..100&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="style/cursor.css"/>
     <link rel="stylesheet" type="text/css" href="style/base.css"/>
+    <link rel="stylesheet" type="text/css" href="style/index.css"/>
+
+    <script src="js/util.js" defer></script>
+    <script src="js/cursor.js" defer></script>
 </head>
 <body>
     <div class="circle"></div>
-    <script src="js/cursor.js"></script>
 
-    <div class="center grid-container">
-        <div class="grid-item">
-            <p class="block-text center-text">Big Block Text</p>
+    <div class="center grid-container" id="main-grid">
+        <div class="grid-item" id="title-item">
+            <p class="paragraph-text center" id="title-paragraph">A multithreaded webserver written in Rust. Has the capability of handling many requests at the same time using a set amount of threads. The server can also respond to specific URIs with actions preformed on the host computer. This system allows for the host IP to be used for many applications at the same time! </p>
+            <div id="title-mask"></div>
+            <p class="minor-text bottom" id="Version">V1.0</p>
+            <p class="block-text-xl center-text" id="title">Rust Web Server</p>
         </div>
-        <div class="grid-item">
+        <div class="grid-item" id="foo-item">
             <p class="block-text left-text">Foo</p>
         </div>
-        <div class="grid-item">
+        <div class="grid-item" id="bar-item">
             <p class="block-text left-text">Bar</p>
         </div>
-        <div class="grid-item">
-            <p class="block-text right-text">Github</p>
+        <div class="grid-item" id="github-item">
+            <a href="https://github.com/GreasyRooster1/MultiThreadWebServer">
+                <img src="images/thumb/github.png" id="github-image" alt="github">
+                <div id="github-mask"></div>
+                <p class="block-text right-text" id="github-title">Github</p>
+            </a>
         </div>
     </div>
 </body>

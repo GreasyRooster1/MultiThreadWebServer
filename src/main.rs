@@ -4,6 +4,7 @@ mod uri;
 
 use std::{io::{prelude::*, BufReader}, net::{TcpListener, TcpStream}, thread};
 use std::time::Duration;
+use log::{error, warn};
 use MultiThreadWebServer::ThreadPool;
 use crate::files::load_contents;
 use crate::paths::DEFAULT_PATH;
@@ -25,12 +26,18 @@ fn main() {
 fn handel_connection(mut stream: TcpStream) {
     //get the BufReader from TcpStream
     let buf_reader = BufReader::new(&mut stream);
-
-    let request_line_result = buf_reader.lines().next().unwrap();
+    let buf_reader_next_line = buf_reader.lines().next();
+    let request_line_result = match buf_reader_next_line {
+        None=> {
+            warn!("received empty packet");
+            return;
+        },
+        _=>buf_reader_next_line.unwrap(),
+    };
     let request_line = match request_line_result {
         Ok(_) => request_line_result.unwrap(),
         Err(_) => {
-            println!("Error caused on reading from buffer");
+            warn!("Error caused on reading from buffer");
             "GET /404 HTTP/1.1".to_string()
         }
     };
