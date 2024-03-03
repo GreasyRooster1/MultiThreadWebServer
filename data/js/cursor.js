@@ -1,5 +1,4 @@
 const circleElement = document.querySelector(".circle");
-const githubElement = document.getElementById("github-item");
 
 const mouse = {x:0,y:0};
 const previousMouse = {x:0,y:0};
@@ -12,6 +11,12 @@ let expandAnimFrame = 0;
 let expandAnimInterval;
 let shrinkAnimFrame = 0;
 let shrinkAnimInterval;
+
+const expandObjects = [
+    document.getElementById("github-item"),
+    document.getElementById("title-item"),
+]
+const maskObjects =  document.getElementsByClassName("mask");
 
 const mask = document.querySelector('#github-mask');
 
@@ -61,9 +66,11 @@ const tick = ()=>{
 
     //apply masks
     let viewportOffset = mask.getBoundingClientRect();
-    mask.style.setProperty('--mouse-x', (circle.x-viewportOffset.left) + 'px');
-    mask.style.setProperty('--mouse-y', (circle.y-viewportOffset.top) + 'px');
-    mask.style.setProperty('--mask-size', (circle.size*20) + 'px');
+    for(let i=0;i<maskObjects.length;i++) {
+        mask.style.setProperty('--mouse-x', (circle.x - viewportOffset.left) + 'px');
+        mask.style.setProperty('--mouse-y', (circle.y - viewportOffset.top) + 'px');
+        mask.style.setProperty('--mask-size', (circle.size * 20) + 'px');
+    }
 
     window.requestAnimationFrame(tick);
 }
@@ -71,36 +78,38 @@ const tick = ()=>{
 tick();
 
 //animation
-githubElement.addEventListener("mouseenter", (event) => {
+for(let i=0;i<expandObjects.length;i++) {
+    expandObjects[i].addEventListener("mouseenter", (event) => {
 
-    //animate circle
-    clearInterval(shrinkAnimInterval);
-    shrinkAnimFrame=0;
-    if(!expandAnimFrame) {
-        expandAnimInterval = setInterval(() => {
-            expandAnimFrame++;
-            let maxSize = 10;
-            circle.size+=Math.abs(circle.size-maxSize)/20
-            if (expandAnimFrame >= 100) {
-                expandAnimFrame = 0;
-                clearInterval(expandAnimInterval);
-            }
-        }, 10);
-    }
-});
-githubElement.addEventListener("mouseleave", (event) => {
+        //animate circle
+        clearInterval(shrinkAnimInterval);
+        shrinkAnimFrame = 0;
+        if (!expandAnimFrame) {
+            expandAnimInterval = setInterval(() => {
+                expandAnimFrame++;
+                let maxSize = 10;
+                circle.size += Math.abs(circle.size - maxSize) / 20
+                if (expandAnimFrame >= 100) {
+                    expandAnimFrame = 0;
+                    clearInterval(expandAnimInterval);
+                }
+            }, 10);
+        }
+    });
+    expandObjects[i].addEventListener("mouseleave", (event) => {
 
-    //animate circle
-    clearInterval(expandAnimInterval);
-    expandAnimFrame = 0;
-    if(!shrinkAnimFrame) {
-        shrinkAnimInterval = setInterval(() => {
-            shrinkAnimFrame++;
-            circle.size-=Math.abs(circle.size-1)/20
-            if (shrinkAnimFrame >= 100) {
-                shrinkAnimFrame = 0;
-                clearInterval(shrinkAnimInterval);
-            }
-        }, 10);
-    }
-});
+        //animate circle
+        clearInterval(expandAnimInterval);
+        expandAnimFrame = 0;
+        if (!shrinkAnimFrame) {
+            shrinkAnimInterval = setInterval(() => {
+                shrinkAnimFrame+=2;
+                circle.size -= Math.abs(circle.size - 1) / 10
+                if (shrinkAnimFrame >= 100) {
+                    shrinkAnimFrame = 0;
+                    clearInterval(shrinkAnimInterval);
+                }
+            }, 10);
+        }
+    });
+}
