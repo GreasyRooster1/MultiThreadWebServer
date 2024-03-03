@@ -10,7 +10,7 @@ use MultiThreadWebServer::ThreadPool;
 use crate::actions::special_cases;
 use crate::files::load_contents;
 use crate::paths::DEFAULT_PATH;
-use crate::uri::{create_const_http, create_http_response, find, parse};
+use crate::uri::{create_const_http, create_http_response, find, HTTPResponse, parse};
 
 fn main() {
     let listener = TcpListener::bind("0.0.0.0:8081").unwrap();
@@ -69,5 +69,5 @@ fn load_contents_from_uri(uri:&str) -> Vec<u8> {
     }else{
         (load_contents(paths::NOT_FOUND_PATH),"NOT FOUND")
     };
-    create_http_response(status.to_string(),contents.as_slice())
+    HTTPResponse::from_bytes(status.to_string(),contents.as_slice())
 }
