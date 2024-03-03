@@ -24,13 +24,22 @@ pub(crate) fn parse(uri: &str) -> String {
         uri.parse().unwrap()
     }
 }
-pub(crate) fn create_http_response(status:String, contents: &[u8]) -> Vec<u8> {
-    let len = contents.len();
-    [format!("HTTP/1.1 {status}\r\nContent-Length:{len}\r\n\r\n").as_bytes().to_owned().clone().as_slice(), contents].concat()
+pub struct HTTPResponse{
+
 }
-pub(crate) fn create_const_http(status:&str,contents:&str)->String{
-    let len = contents.len();
-    format!("HTTP/1.1 {status}\r\nContent-Length:{len}\r\n\r\n{contents}")
+impl HTTPResponse {
+    pub(crate) fn from_bytes(status: String, contents: &[u8]) -> Vec<u8> {
+        let len = contents.len();
+        [format!("HTTP/1.1 {status}\r\nContent-Length:{len}\r\n\r\n").as_bytes().to_owned().clone().as_slice(), contents].concat()
+    }
+    pub(crate) fn from_string(status: &str, contents: &str) -> String {
+        let len = contents.len();
+        format!("HTTP/1.1 {status}\r\nContent-Length:{len}\r\n\r\n{contents}")
+    }
+    pub(crate) fn from_string_as_bytes(status: &str, contents: &str) -> Vec<u8> {
+        let len = contents.len();
+        format!("HTTP/1.1 {status}\r\nContent-Length:{len}\r\n\r\n{contents}").as_bytes().to_owned()
+    }
 }
 
 //tests
