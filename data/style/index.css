@@ -87,8 +87,8 @@
     background: var(--background-med);
     top:0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 101%;
+    height: 101%;
     position: absolute;
     mask: radial-gradient(
             circle at var(--mouse-x) var(--mouse-y),
@@ -113,4 +113,7 @@
 }
 #security-item:hover #security-title{
     color: #00ff00;
+}
+#security-matrix{
+    z-index: 50;
 }
