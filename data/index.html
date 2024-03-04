@@ -12,13 +12,12 @@
     <link rel="stylesheet" type="text/css" href="style/index.css"/>
     <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
 
+    <script src="js/index_cursor_data.js"></script>
     <script src="js/util.js" defer></script>
     <script src="js/cursor.js" defer></script>
     <script src="js/matrix.js" defer></script>
 </head>
 <body>
-    <div class="circle security-fade-event"></div>
-
     <div class="center grid-container" id="main-grid">
         <div class="grid-item" id="title-item">
             <p class="paragraph-text center" id="title-paragraph">A multithreaded webserver written in Rust. Has the capability of handling many requests at the same time using a set amount of threads. The server can also respond to specific URIs with actions preformed on the host computer. This system allows for the host IP to be used for many applications at the same time! </p>
@@ -29,14 +28,12 @@
         <div class="grid-item" id="foo-item">
             <p class="block-text left-text">Foo</p>
         </div>
-        <div class="grid-item" id="security-item">
-            <a href="/security">
-                <div id="security-effect">
-                    <canvas width="500" height="500" id="security-matrix">your browser doesnt support HTML5</canvas>
-                </div>
-                <div class="security-fade-event" id="security-cover"></div>
-                <p class="block-text left-text" id="security-title">Secure Data</p>
-            </a>
+        <div class="grid-item" id="security-item" onclick="location.href='/security';">
+            <div id="security-effect">
+                <canvas width="500" height="500" id="security-matrix">your browser doesnt support HTML5</canvas>
+            </div>
+            <div class="security-fade-event" id="security-cover"></div>
+            <p class="block-text left-text" id="security-title">Secure Data</p>
         </div>
         <div class="grid-item" id="github-item">
             <a href="https://github.com/GreasyRooster1/MultiThreadWebServer">

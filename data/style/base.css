@@ -2,6 +2,7 @@
     --background-dark: #222025;
     --background-med: #373546;
     --background-med-faded: rgba(71, 68, 89, 0.58);
+    --background-high: #484557;
 
     --cursor-color: #a592c4;
 
@@ -24,7 +25,6 @@ body{
     top: 50%;
     right: 50%;
     transform: translate(50%,-50%);
-    width: fit-content;
 }
 .bottom{
     margin-top: 100%;
@@ -34,6 +34,7 @@ body{
 
 .center-text{
     text-align: center;
+    width: 100%;
 }
 .left-text{
     text-align: left;
@@ -90,3 +91,7 @@ body{
 }
 
 
+input[type=text]{
+    background-color:var(--background-high);
+    color: white;
+}

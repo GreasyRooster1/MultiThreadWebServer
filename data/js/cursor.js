@@ -1,3 +1,4 @@
+$("body").prepend("<div class=\"circle security-fade-event\"></div>");
 const circleElement = document.querySelector(".circle");
 
 const mouse = {x:0,y:0};
