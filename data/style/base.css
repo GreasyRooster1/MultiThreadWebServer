@@ -114,3 +114,28 @@ input[type=text]:focus{
     border: 3px solid var(--input-border);
     outline: none;
 }
+
+button{
+    background-color:var(--background-high);
+    color:var(--text-paragraph);
+    font-family: "Redex Pro", sans-serif;
+    font-weight: 500;
+    font-size: large;
+    width:50%;
+    border: none;
+    box-sizing: border-box;
+    border-radius: 100px;
+    padding: 2%;
+    margin-top: 10px;
+    transition:0.3s
+}
+button:hover{
+    color:var(--background-med);
+    font-weight: 650;
+    font-size: x-large;
+    background-color: var(--input-selected);
+}
+button:focus{
+    border: 3px solid var(--input-border);
+    outline: none;
+}
