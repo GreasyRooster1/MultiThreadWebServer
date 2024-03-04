@@ -16,7 +16,7 @@
     <script src="js/cursor.js" defer></script>
 </head>
 <body>
-    <div class="circle"></div>
+    <div class="circle security-fade-event"></div>
 
     <div class="center grid-container" id="main-grid">
         <div class="grid-item" id="title-item">
@@ -29,7 +29,11 @@
             <p class="block-text left-text">Foo</p>
         </div>
         <div class="grid-item" id="security-item">
-            <p class="block-text left-text">Secure Data</p>
+            <div id="security-effect">
+                <canvas width="500" height="200" id="security-matrix">your browser doesnt support HTML5</canvas>
+            </div>
+            <div class="security-fade-event" id="security-cover"></div>
+            <p class="block-text left-text" id="security-title">Secure Data</p>
         </div>
         <div class="grid-item" id="github-item">
             <a href="https://github.com/GreasyRooster1/MultiThreadWebServer">

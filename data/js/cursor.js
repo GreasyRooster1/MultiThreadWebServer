@@ -20,6 +20,7 @@ const expandObjects = [
 const maskObjects = [
     document.getElementById("github-mask"),
     document.getElementById("title-mask"),
+    document.getElementById("security-cover"),
 ]
 
 
@@ -120,9 +121,9 @@ for(let i=0;i<expandObjects.length;i++) {
 
 $(function() {
     $('#security-item').hover(function() {
-        $('.circle').css('opacity', '0');
+        $('.security-fade-event').css('opacity', '0');
     }, function() {
         // on mouseout, reset the background colour
-        $('.circle').css('opacity', '1');
+        $('.security-fade-event').css('opacity', '1');
     });
 });

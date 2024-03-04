@@ -3,7 +3,7 @@
     --background-med: #373546;
     --background-med-faded: rgba(71, 68, 89, 0.58);
 
-    --cursor: #a592c4;
+    --cursor-color: #a592c4;
 
     --text-block: #7c67d9;
     --text-block-high: #ebb3ff;
@@ -56,6 +56,8 @@ body{
     padding: 20px;
     border-radius: 10px;
     display:flex;
+    overflow: hidden;
+    position: relative;
 }
 
 
