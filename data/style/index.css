@@ -48,6 +48,7 @@
 #title{
     z-index: 100;
     line-height: 1;
+    transition: 0.5s;
 }
 #version{
     z-index: 100;
@@ -55,7 +56,7 @@
 #title-paragraph{
     display: block;
     position: absolute;
-    top: 60%;
+    top: 50%;
     right: 50%;
     transform: translate(50%,-50%);
     width: 75%;
@@ -77,6 +78,9 @@
 }
 #title-item:hover #title-mask{
     background: var(--background-med-faded);
+}
+#title-item:hover #title{
+    opacity: 0;
 }
 
 .security-fade-event{

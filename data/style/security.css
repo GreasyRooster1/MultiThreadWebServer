@@ -1,12 +1,12 @@
 #login-pane{
     background: var(--background-med);
     width: 50vmin;
-    height: 50vmin;
+    height: 75vmin;
     padding: 20px;
     border-radius: 10px;
-    display:flex;
     overflow: hidden;
 }
 #title{
     position: relative;
+    width: 100%;
 }

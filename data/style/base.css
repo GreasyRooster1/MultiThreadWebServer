@@ -11,6 +11,8 @@
     --text-minor: #9b8eb6;
     --text-paragraph: #cbc1ea;
 
+    --input-selected: #695d9d;
+    --input-border: #afa1e8;
 
     --github-mask-high: #aa62c2;
 }
@@ -90,8 +92,25 @@ body{
     font-size: 1em;
 }
 
-
 input[type=text]{
     background-color:var(--background-high);
-    color: white;
+    color:var(--text-paragraph);
+    border: none;
+    box-sizing: border-box;
+    border-radius: 100px;
+    padding: 2%;
+    width: 100%;
+    margin-top: 10px;
+    transition:0.3s
+}
+input[type=text]:hover{
+    margin-top: 15px;
+    margin-bottom: 5px;
+    padding:3%;
+    color:var(--background-dark);
+    background-color: var(--input-selected);
+}
+input[type=text]:focus{
+    border: 3px solid var(--input-border);
+    outline: none;
 }
