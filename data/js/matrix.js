@@ -37,7 +37,7 @@ function fitToContainer(canvas){
     w = canvas.width;
     h = canvas.height;
     cols = Math.floor(w / 20) + 1;
-    ypos = Array(cols).fill(0);
+    ypos = Array(cols).fill(0).map(() => Math.round(Math.random() *100)*20)
     charset = possible_charsets[Math.floor(Math.random()*possible_charsets.length)];
     offsets = Array(cols).fill(0).map(() => Math.round(Math.random() * charset.length));
     glitches = Array(cols).fill(false);
@@ -76,13 +76,12 @@ function matrix () {
             }else{
                 glitches[ind] = false;
             }
-        }
-        else ypos[ind] = y + 20;
+        }else ypos[ind]+=20;
     });
 }
 
 fitToContainer(canvas);
 // render the animation at 20 FPS.
-setInterval(matrix, 50);
+setInterval(matrix, 70);
 ctx.fillStyle = '#000';
 ctx.fillRect(0, 0, w, h);
