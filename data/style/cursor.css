@@ -3,7 +3,7 @@
     position: fixed;
     height: var(--circle-size);
     width: var(--circle-size);
-    border: .1vmin solid var(--cursor);
+    border: .1vmin solid var(--cursor-color);
     border-radius: 100%;
     top: calc(var(--circle-size)/2 * -1);
     left: calc(var(--circle-size)/2 * -1);

@@ -1,0 +1,91 @@
+:root{
+    --security-background:#000;
+    --security-button-background:#000;
+    --security-button-text:#0f0;
+    --security-input-background:#000;
+    --security-input-background-hover:#0F0;
+    --security-button-text-hover:#000;
+    --security-button-background-hover:#0f0;
+    --security-input-text-hover:#000;
+    --security-input-text:#0F0;
+    --security-title:#0f0 ;
+}
+
+#login-pane{
+    background: var(--security-background);
+    border: 3px solid #0f0;
+    width: 50vmin;
+    height: 75vmin;
+    padding: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+#title{
+    position: relative;
+    width: 100%;
+    color:#0f0;
+}
+#submit-button-wrapper{
+    width:100%
+}
+input[type=text]{
+    background-color:var(--security-input-background);
+    color:var(--security-input-text);
+    border: 1px solid #0f0;
+    box-sizing: border-box;
+    border-radius: 100px;
+    padding: 2%;
+    width: 100%;
+    margin-top: 10px;
+    transition:0.3s
+}
+
+input[type=text]:hover{
+    margin-top: 15px;
+    margin-bottom: 5px;
+    padding:3%;
+    color:var(--security-input-text-hover);
+    background-color: var(--security-input-background-hover);
+}
+input[type=text]:focus{
+    outline: none;
+}
+input::placeholder{
+    color: var(--security-input-text);
+}
+input[type=text]::placeholder:hover{
+    color: var(--security-input-text-hover);
+}
+
+button{
+    background-color:var(--security-button-background);
+    color:var(--security-button-text);
+    font-family: "Redex Pro", sans-serif;
+    font-weight: 500;
+    font-size: large;
+    width:50%;
+    border:1px solid #0f0;
+    box-sizing: border-box;
+    border-radius: 100px;
+    padding: 2%;
+    margin-top: 10px;
+    transition:0.3s;
+}
+button:hover{
+    color:var(--security-input-text-hover);
+    font-weight: 650;
+    font-size: x-large;
+    background-color: var(--security-button-background-hover);
+}
+button:focus{
+
+    outline: none;
+}
+
+#security-matrix{
+    width: 100%;
+    height: 100%;
+    top:0;
+    right: 0;
+    position: absolute;
+}

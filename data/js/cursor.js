@@ -1,3 +1,4 @@
+$("body").prepend("<div class=\"circle security-fade-event\"></div>");
 const circleElement = document.querySelector(".circle");
 
 const mouse = {x:0,y:0};
@@ -15,13 +16,14 @@ let shrinkAnimInterval;
 const expandObjects = [
     document.getElementById("github-item"),
     document.getElementById("title-item"),
+    document.getElementById("security-item"),
 ]
 const maskObjects = [
     document.getElementById("github-mask"),
     document.getElementById("title-mask"),
+    document.getElementById("security-cover"),
 ]
 
-const mask = document.querySelector('#github-mask');
 
 //movement
 window.addEventListener("mousemove",(e) => {
@@ -83,7 +85,7 @@ tick();
 
 //animation
 for(let i=0;i<expandObjects.length;i++) {
-    expandObjects[i].addEventListener("mouseenter", (event) => {
+    expandObjects[i].addEventListener("mouseenter", (_event) => {
 
         //animate circle
         clearInterval(shrinkAnimInterval);
@@ -100,7 +102,7 @@ for(let i=0;i<expandObjects.length;i++) {
             }, 10);
         }
     });
-    expandObjects[i].addEventListener("mouseleave", (event) => {
+    expandObjects[i].addEventListener("mouseleave", (_event) => {
 
         //animate circle
         clearInterval(expandAnimInterval);
@@ -117,3 +119,12 @@ for(let i=0;i<expandObjects.length;i++) {
         }
     });
 }
+
+$(function() {
+    $('#security-item').hover(function() {
+        $('.security-fade-event').css('opacity', '0');
+    }, function() {
+        // on mouseout, reset the background colour
+        $('.security-fade-event').css('opacity', '1');
+    });
+});
