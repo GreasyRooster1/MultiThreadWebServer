@@ -2,6 +2,7 @@ mod files;
 mod paths;
 mod uri;
 mod actions;
+mod cryptography;
 
 use std::{io::{prelude::*, BufReader}, net::{TcpListener, TcpStream}, thread};
 use std::time::Duration;
