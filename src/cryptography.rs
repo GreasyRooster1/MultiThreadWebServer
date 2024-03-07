@@ -1,44 +1,30 @@
-use argon2::{
-    password_hash::{
-        PasswordHash, PasswordHasher, PasswordVerifier, SaltString
-    },
-    Argon2
-};
 use std::fmt::{Debug, Display, Formatter, Result as FmtResult};
 use rand::thread_rng;
 use rsa::{Pkcs1v15Encrypt, RsaPrivateKey, RsaPublicKey};
+use rsa::pkcs1::LineEnding;
+use rsa::pkcs8::{DecodePrivateKey, DecodePublicKey, EncodePrivateKey, EncodePublicKey};
 
+pub const ENCRYPTION_BIT_SIZE:usize = 2048;
+const PRIVATE_KEY_PKCS8: &str = "-----END PRIVATE KEY-----x+4DMBjtPKWuSXL+MtldgM6rxDOmGBQDMnooPuH";
+pub const PUBLIC_KEY_PKCS8: &str = "-----END PUBLIC KEY-----E02kF6fW7Igqk7m/jWlnumXzMxjIIuEx29WucrfR";
 
-pub struct Hash{
-    hash: String,
-}
-
-impl Hash{
-    fn check_hash(&self,password:String,salt:&str)->bool{
-        let argon2 = Argon2::default();
-        argon2.hash_password(password.as_bytes(),&SaltString::generate(rsa::rand_core::OsRng))?.to_string()==self.hash
-    }
-    fn from_hash(h:String)->Hash{
-        Hash{
-            hash:h,
-        }
-    }
-    fn new(password:&str,salt:&str)->Hash{
-        let argon2 = Argon2::default();
-        Hash{
-            hash: argon2.hash_password(password.as_bytes(),salt)?.to_string(),
-        }
-    }
+fn generate_new_keys(){
+    let private = RsaPrivateKey::new(&mut rsa::rand_core::OsRng, 2048).expect("failed to generate a key");
+    println!("{}",private
+        .to_pkcs8_pem(LineEnding::CR)
+        .unwrap()
+        .to_string());
+    println!("{}",RsaPublicKey::from(private)
+        .to_public_key_pem(LineEnding::CR)
+        .unwrap()
+        .to_string());
+    println!("wrote to file");
 }
 
 fn encrypt(data:Vec<u8>,){
-    let bits = 2048;
-    let priv_key = RsaPrivateKey::new(&mut rsa::rand_core::OsRng, bits).expect("failed to generate a key");
-    let pub_key = RsaPublicKey::from(&priv_key);
-    pub_key.encrypt(&mut rsa::rand_core::OsRng, Pkcs1v15Encrypt, &data[..]).expect("failed to encrypt");
+    //client public ket should be used here
+    //RsaPublicKey::from_public_key_pem(PUBLIC_KEY)?.encrypt(&mut rsa::rand_core::OsRng, Pkcs1v15Encrypt, &data[..]).expect("failed to encrypt");
 }
 fn decrypt(data:Vec<u8>){
-    let bits = 2048;
-    let priv_key = RsaPrivateKey::new(&mut rsa::rand_core::OsRng, bits).expect("failed to generate a key");
-    priv_key.decrypt(Pkcs1v15Encrypt, &data).expect("failed to decrypt");
+    RsaPrivateKey::from_pkcs8_pem(PUBLIC_KEY_PKCS8).expect("error while decrypting").decrypt(Pkcs1v15Encrypt, &data).expect("failed to decrypt");
 }

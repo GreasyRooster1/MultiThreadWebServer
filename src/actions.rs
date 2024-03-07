@@ -1,6 +1,10 @@
 use std::thread;
 use std::time::Duration;
 use log::warn;
+use rsa::pkcs1::{EncodeRsaPublicKey, LineEnding};
+use rsa::pkcs8::EncodePublicKey;
+use crate::cryptography::PUBLIC_KEY_PKCS8;
+//use crate::cryptography::PUBLIC_KEY;
 use crate::files::{load_contents, safe_load};
 use crate::load_contents_from_uri;
 use crate::uri::*;
@@ -10,6 +14,7 @@ pub fn special_cases(uri:&str) -> Vec<u8> {
         uri if uri.starts_with("/raw_data_request")=>{
             secure_data_request_action(uri)
         }
+        "/public_key"=> public_key(uri),
         _ => { load_contents_from_uri(uri)}
     }
 }
@@ -30,4 +35,9 @@ pub fn secure_data_request_action(uri:&str) ->Vec<u8>{
         Some(data) => {data}
     };
     HTTPResponse::from_bytes("200 OK".to_string(), contents.as_slice())
+}
+
+pub fn public_key(uri: &str) ->Vec<u8>{
+    let key =PUBLIC_KEY_PKCS8.as_bytes().to_owned();
+    HTTPResponse::from_bytes("200 OK".to_string(), key.as_slice())
 }
