@@ -9,7 +9,7 @@ const PRIVATE_KEY_PKCS8: &str = "-----END PRIVATE KEY-----x+4DMBjtPKWuSXL+MtldgM
 pub const PUBLIC_KEY_PKCS8: &str = "-----END PUBLIC KEY-----E02kF6fW7Igqk7m/jWlnumXzMxjIIuEx29WucrfR";
 
 fn generate_new_keys(){
-    let private = RsaPrivateKey::new(&mut rsa::rand_core::OsRng, 2048).expect("failed to generate a key");
+    let private = RsaPrivateKey::new(&mut rsa::rand_core::OsRng, 4096).expect("failed to generate a key");
     println!("{}",private
         .to_pkcs8_pem(LineEnding::CR)
         .unwrap()

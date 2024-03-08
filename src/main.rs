@@ -17,8 +17,6 @@ use crate::paths::DEFAULT_PATH;
 use crate::uri::*;
 
 fn main() {
-
-
     let listener = TcpListener::bind("0.0.0.0:8081").unwrap();
     let pool = ThreadPool::new(15);
 

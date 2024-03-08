@@ -78,7 +78,6 @@ button:hover{
     background-color: var(--security-button-background-hover);
 }
 button:focus{
-
     outline: none;
 }
 
