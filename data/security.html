@@ -14,8 +14,8 @@
     <script src="https://cdn.jsdelivr.net/npm/hybrid-crypto-js@0.2.4/web/hybrid-crypto.min.js"></script>
 
     <script src="js/util.js" defer></script>
-    <script src="js/securityForm.js" defer></script>
     <script src="js/matrix.js" defer></script>
+    <script src="js/securityForm.js" defer></script>
 </head>
 <body>
     <canvas id="security-matrix" class="newtonian"></canvas>
@@ -26,7 +26,14 @@
         <input type="text" id="decode-key-input" placeholder="Decode Key">
         <input type="text" id="password-input" placeholder="Password Hash">
         <div id="submit-button-wrapper">
-            <button id="submit-button" class="center">Submit</button>
+            <button id="submit-button">Submit</button>
+        </div>
+        <div id="telemetry-console">
+
+        </div>
+        <div id="telemetry-checkbox-wrapper">
+            <label for="telemetry-checkbox" id="telemetry-checkbox-label">Telemetry</label>
+            <input type="checkbox" id="telemetry-checkbox" class="center">
         </div>
     </div>
 </body>

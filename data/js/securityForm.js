@@ -5,16 +5,10 @@ let privateKey;
 let serverPublicKey;
 let doTelemetry = false;
 
-function testHttpGet(){
-    fetch("/index.html").then(function(response) {
-        return response.text();
-    }).then(function(data) {
-        console.log(data);
-    }).catch(function(err) {
-        console.log('Fetch Error :-S', err);
-    });
+function logTelemetry(str){
+    $("#telemetry-console").append("<p>"+new Date().toString()+" - "+str+"</p>");
 }
-function testGetServerPublicKey(){
+function getServerPublicKey(){
     fetch("/public_key").then(function(response) {
         return response.text();
     }).then(function(data) {
@@ -23,18 +17,42 @@ function testGetServerPublicKey(){
         console.log('Fetch Error :-S', err);
     });
 }
+function preformHttpRequest(url){
+    let data = null;
+    fetch(url).then(function(response) {
+        return response.text();
+    }).then(function(d) {
+        data=d;
+    }).catch(function(err) {
+        console.log('Fetch Error :-S', err);
+    });
+    return data;
+}
 function generateKeys() {
     var rsa = new RSA();
     rsa.generateKeyPair(function(keyPair) {
         publicKey = keyPair.publicKey;
         privateKey = keyPair.privateKey;
     });
-    console.log('publicKey', publicKey);
-    console.log('privateKey', privateKey);
+    logTelemetry("PubKey: "+publicKey);
+    logTelemetry("PrivKey: "+privateKey);
+    logTelemetry("Generated session encryption keys!");
 }
-
 function encrypt(data) {
-    var entropy = Math.random()*19283749128;
+    let entropy ="wow its encryption";
+    let crypt = new Crypt({
+        rsaStandard: 'RSA-OAEP',
+        entropy: entropy
+    });
+    let rsa = new RSA({
+        entropy: entropy
+    });
+    return crypt.encrypt({
+        name: "RSA-OAEP",
+    },serverPublicKey, data);
+}
+function decrypt(data) {
+    var entropy = "wow its encryption";
     var crypt = new Crypt({
         rsaStandard: 'RSA-OAEP',
         entropy: entropy
@@ -42,17 +60,27 @@ function encrypt(data) {
     var rsa = new RSA({
         entropy: entropy
     });
-    return crypt.encrypt(serverPublicKey, data);
+    return crypt.decrypt({
+        name: "RSA-OAEP",
+    },privateKey, data);
 }
 
 var requestSecureData = function(){
     let filename = $("#filename-input").val();
-    let transferKey = $("#transfer-key-input").val();
     let decodeKey = $("#decode-key-input").val();//not important
-    let passwordHash = $("#password-input").val();
+    let password = $("#password-input").val();
 
-    window.location.replace("/raw_data_request/"+passwordHash+"/"+filename);
+    let encryptedRequest = encrypt(password+"."+filename+"."+publicKey);
+
+    //let response = preformHttpRequest("/raw_data_request/"+encryptedRequest);
+    //logTelemetry("raw_data_request response: "+response);
 }
 
-generateKeys();
+
 $("#submit-button").click(requestSecureData);
+$("#telemetry-console").hide();
+$("#telemetry-checkbox").click(function() {
+    $("#telemetry-console").toggle(this.checked);
+});
+getServerPublicKey()
+generateKeys();

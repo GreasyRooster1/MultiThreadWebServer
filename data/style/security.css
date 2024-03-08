@@ -26,7 +26,13 @@
     color:#0f0;
 }
 #submit-button-wrapper{
-    width:100%
+    position: absolute;
+    width:100%;
+    top:40%;
+}
+#submit-button{
+    left:50%;
+    transform: translateX(50%);
 }
 input[type=text]{
     background-color:var(--security-input-background);
@@ -87,4 +93,36 @@ button:focus{
     top:0;
     right: 0;
     position: absolute;
+}
+#telemetry-checkbox-wrapper{
+    position: absolute;
+    top:99%;
+    left:0;
+    transform: translateY(-100%);
+}
+#telemetry-checkbox{
+    position: relative;
+    background-color: #00FF00;
+    border: none;
+    height: 10px;
+    width: 10px;
+}
+#telemetry-checkbox-label{
+    font-size: 10px;
+    position: absolute;
+    color:#0f0;
+    left:100%;
+    top:-25%;
+}
+#telemetry-console{
+    position: absolute;
+    top:50%;
+    width: 95%;
+    height: 45%;
+    border: #00FF00 solid 2px;
+    border-radius: 10px;
+    overflow: scroll;
+}
+p{
+    color: #00FF00;
 }
