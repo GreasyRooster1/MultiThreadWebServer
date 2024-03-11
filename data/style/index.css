@@ -76,6 +76,9 @@
     );
     transition: 0.5s;
 }
+#title-item:hover{
+    background: var(--background-high);
+}
 #title-item:hover #title-mask{
     background: var(--background-med-faded);
 }
@@ -120,4 +123,17 @@
 }
 #security-matrix{
     z-index: 50;
+}
+
+#projects-item{
+    transition: 0.5s;
+}
+#projects-title{
+    transition:0.5s;
+}
+#projects-item:hover{
+    background-color: var(--background-high);
+}
+#projects-item:hover #projects-title {
+    color:var(--text-block-high)
 }
