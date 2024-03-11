@@ -5,6 +5,14 @@ let privateKey;
 let serverPublicKey;
 let doTelemetry = false;
 
+function str2ab(str) {
+    var buf = new ArrayBuffer(str.length * 2); // 2 bytes for each char
+    var bufView = new Uint16Array(buf);
+    for (var i = 0, strLen = str.length; i < strLen; i++) {
+        bufView[i] = str.charCodeAt(i);
+    }
+    return buf;
+}
 function logTelemetry(str){
     $("#telemetry-console").append("<p>"+new Date().toString()+" - "+str+"</p>");
 }
@@ -12,7 +20,7 @@ function getServerPublicKey(){
     fetch("/public_key").then(function(response) {
         return response.text();
     }).then(function(data) {
-        serverPublicKey = data.replace("-----END PUBLIC KEY-----","");
+        serverPublicKey = window.crypto.subtle.importKey("pkcs8",str2ab(atob(data.replace("-----END PUBLIC KEY-----","" ))),{name: "RSA-PSS",hash: "SHA-256",},true,["sign","verify"]);
     }).catch(function(err) {
         console.log('Fetch Error :-S', err);
     });
@@ -34,6 +42,10 @@ function generateKeys() {
         publicKey = keyPair.publicKey;
         privateKey = keyPair.privateKey;
     });
+    if(privateKey==null||publicKey==null){
+        logTelemetry("Failed to generate encryption keys!");
+        return;
+    }
     logTelemetry("PubKey: "+publicKey);
     logTelemetry("PrivKey: "+privateKey);
     logTelemetry("Generated session encryption keys!");
@@ -76,11 +88,13 @@ var requestSecureData = function(){
     //logTelemetry("raw_data_request response: "+response);
 }
 
-
-$("#submit-button").click(requestSecureData);
-$("#telemetry-console").hide();
-$("#telemetry-checkbox").click(function() {
-    $("#telemetry-console").toggle(this.checked);
-});
-getServerPublicKey()
-generateKeys();
+window.onload= (event) => {
+    $("#submit-button").click(requestSecureData);
+    $("#telemetry-console").hide();
+    $("#telemetry-checkbox").click(function () {
+        $("#telemetry-console").toggle(this.checked);
+    });
+    getServerPublicKey()
+    setTimeout(generateKeys,1000);
+    setTimeout(generateKeys,2000);
+};
