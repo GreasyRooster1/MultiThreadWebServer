@@ -17,11 +17,13 @@ const expandObjects = [
     document.getElementById("github-item"),
     document.getElementById("title-item"),
     document.getElementById("security-item"),
+    document.getElementById("projects-item"),
 ]
 const maskObjects = [
     document.getElementById("github-mask"),
     document.getElementById("title-mask"),
     document.getElementById("security-cover"),
+    document.getElementById("projects-item"),
 ]
 
 
