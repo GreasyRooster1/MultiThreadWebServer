@@ -11,10 +11,20 @@
     <link rel="stylesheet" type="text/css" href="style/base.css"/>
     <link rel="stylesheet" type="text/css" href="style/index.css"/>
     <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+    <script type="importmap">
+        {
+          "imports": {
+            "three.js": "https://unpkg.com/three@<0.162.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.162.0/examples/jsm/"
+          }
+        }
+    </script>
+
 
     <script src="js/util.js" defer></script>
     <script src="js/cursor.js" defer></script>
     <script src="js/matrix.js" defer></script>
+    <script src="js/rotatingCube.js" type="module" defer></script>
 </head>
 <body>
     <div class="center grid-container" id="main-grid">
@@ -27,6 +37,7 @@
         <div class="grid-item" id="projects-item">
             <a href="/projects">
                 <p class="block-text left-text" id="projects-title">Projects</p>
+                <canvas width="500" height="500" id="rotating-cube">your browser doesnt support HTML5</canvas>
             </a>
         </div>
         <div class="grid-item" id="security-item" onclick="location.href='/security';">
