@@ -2,10 +2,14 @@ mod files;
 mod paths;
 mod uri;
 mod actions;
+mod cryptography;
 
 use std::{io::{prelude::*, BufReader}, net::{TcpListener, TcpStream}, thread};
 use std::time::Duration;
 use log::{error, warn};
+use rsa::pkcs1::{EncodeRsaPrivateKey, LineEnding};
+use rsa::pkcs8::{EncodePrivateKey, EncodePublicKey};
+use rsa::{RsaPrivateKey, RsaPublicKey};
 use MultiThreadWebServer::ThreadPool;
 use crate::actions::special_cases;
 use crate::files::load_contents;
