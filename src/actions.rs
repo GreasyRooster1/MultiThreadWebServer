@@ -6,7 +6,6 @@ use rsa::pkcs8::EncodePublicKey;
 use crate::cryptography::PUBLIC_KEY_PKCS8;
 //use crate::cryptography::PUBLIC_KEY;
 use crate::files::{load_contents, safe_load};
-use crate::load_contents_from_uri;
 use crate::uri::*;
 
 pub fn special_cases(uri:&str) -> Vec<u8> {
@@ -15,7 +14,7 @@ pub fn special_cases(uri:&str) -> Vec<u8> {
             secure_data_request_action(uri)
         }
         "/public_key"=> public_key(uri),
-        _ => { load_contents_from_uri(uri)}
+        _ => { HTTPResponse::from_uri(uri)}
     }
 }
 

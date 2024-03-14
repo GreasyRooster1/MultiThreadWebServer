@@ -62,16 +62,3 @@ fn handel_connection(mut stream: TcpStream) {
 
 
 
-fn load_contents_from_uri(uri:&str) -> Vec<u8> {
-    let filename = if uri.eq("/") {
-        find(DEFAULT_PATH)
-    }else{
-        parse(find(uri).as_str())
-    };
-    let (contents,status) = if files::file_exists(filename.as_str()) {
-        (load_contents(filename.as_str()),"200 OK")
-    }else{
-        (load_contents(paths::NOT_FOUND_PATH),"NOT FOUND")
-    };
-    HTTPResponse::from_bytes(status.to_string(),contents.as_slice())
-}
