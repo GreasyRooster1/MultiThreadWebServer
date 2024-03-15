@@ -2,6 +2,7 @@ use tokio::*;
 use tokio::signal;
 use tokio::sync::mpsc;
 use tokio::task::JoinHandle;
+use crate::logging::{log_critical, log_debug, log_error, log_info, log_warn};
 use crate::threadlib::*;
 
 struct InteractiveStdin {
@@ -67,8 +68,19 @@ async fn async_input(){
 fn handel_console_input(message: String){
     match message.as_str() {
         "forcequit"=>{
+            log_info("killing main process...","forcequit");
             std::process::exit(0);
         }
+        "logtest"=>{
+            log_info("testing the logs, following logs should be ignored","logtest");
+            log_debug("debugging...","logtest");
+            log_info("wow this is a log!","logtest");
+            log_warn("im warning you...","logtest");
+            log_error("uh oh!","logtest");
+            log_critical("some thing really bad happened","logtest");
+            log_info("log test has concluded!","logtest");
+        }
+
         _ => {}
     }
 }

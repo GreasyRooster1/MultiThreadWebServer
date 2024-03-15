@@ -23,11 +23,7 @@ use crate::uri::*;
 
 #[tokio::main]
 async fn main() {
-    log_debug("debugging...","main");
-    log_info("wow this is a log!","main");
-    log_warn("im warning you...","main");
-    log_error("uh oh!","main");
-    log_critical("some thing really bad happened","main");
+
     let listener = TcpListener::bind("0.0.0.0:8081").unwrap();
     let pool = ThreadPool::new(15);
 
