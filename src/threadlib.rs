@@ -2,13 +2,14 @@ use std::{
     sync::{mpsc, Arc, Mutex},
     thread,
 };
+use crate::logging::{log_error, log_info};
 
 pub struct ThreadPool {
     workers: Vec<Worker>,
     sender: Option<mpsc::Sender<Job>>,
 }
 
-type Job = Box<dyn FnOnce() + Send + 'static>;
+type Job = (Box<dyn FnOnce() + Send + 'static>,usize);
 
 impl ThreadPool {
     pub fn new(size: usize) -> ThreadPool {
@@ -32,7 +33,7 @@ impl ThreadPool {
     where
         F: FnOnce() + Send + 'static,
     {
-        let job = Box::new(f);
+        let job = (Box::new(f) as Box<dyn FnOnce() + Send>,0usize);
         self.sender.as_ref().unwrap().send(job).unwrap();
     }
 }
@@ -41,7 +42,7 @@ impl Drop for ThreadPool {
     fn drop(&mut self) {
         drop(self.sender.take());
         for worker in &mut self.workers {
-            println!("Shutting down worker {}", worker.id);
+            log_info(format!("Shutting down worker {}", worker.id).as_str(),"worker");
 
             if let Some(thread) = worker.thread.take() {
                 thread.join().unwrap();
@@ -62,12 +63,13 @@ impl Worker {
 
             match message {
                 Ok(job) => {
-                    println!("Worker {id} got a job, executing...");
+                    log_info(format!("worker {id} got a job, executing...").as_str(),"worker");
 
-                    job();
+                    let (func,id)=job;
+                    func();
                 }
                 Err(_) => {
-                    println!("Worker {id} disconnected, shutting down...");
+                    log_error(format!("worker {id} disconnected, closing thread").as_str(),"worker");
                     break;
                 }
             }
@@ -76,5 +78,8 @@ impl Worker {
             id,
             thread: Some(thread),
         }
+    }
+    pub fn id(&self)->usize{
+        self.id
     }
 }

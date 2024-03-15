@@ -1,6 +1,7 @@
 use std::fs;
 use std::path::Path;
 use log::warn;
+use crate::logging::log_warn;
 
 pub fn file_exists(filename: &str) -> bool {
     Path::new(filename).exists()
@@ -15,7 +16,7 @@ pub fn safe_load(filename: &str)->Option<Vec<u8>>{
         let data = match fs::read(filename){
             Ok(data) => { data }
             Err(err) => {
-                warn!("Error occurred in safe_load(): {err}");
+                log_warn(format!("Error occurred in safe_load(): {err}").as_str(),"files::safe_load");
                 return None;
             }
         };

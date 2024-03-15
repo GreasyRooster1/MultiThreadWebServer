@@ -7,13 +7,25 @@ use inline_colorization::*;
 
 fn generate_log(message:&str,process:&str,time:NaiveTime,date:NaiveDate,log_type: String){
     let reset = format!("{style_reset}{color_white}{bg_reset}");
-    let threadid= process::id();
-    println!("{reset}{color_bright_cyan}[{process}-{threadid}] {color_blue}[{date}|{time}] {style_bold}{log_type}{reset} {message}{reset}")
+    let thread = thread::current();
+    let thread_name = match thread.name() {
+        None => {"anon"}
+        Some(name) => {
+            name
+        }
+    };
+    println!("{reset}{color_bright_cyan}[{process}|{thread_name}] {color_blue}[{date}|{time}] {style_bold}{log_type}{reset} {message}{reset}")
 }
 fn generate_log_with_color(message:&str,process:&str,time:NaiveTime,date:NaiveDate,log_type: String,color:String){
     let reset = format!("{style_reset}{color_white}{bg_reset}");
-    let threadid= process::id();
-    println!("{reset}{color_bright_cyan}[{process}-{threadid}] {color_blue}[{date}|{time}] {style_bold}{log_type}{reset}{color} {message}{reset}")
+    let thread = thread::current();
+    let thread_name = match thread.name() {
+        None => {"anon"}
+        Some(name) => {
+            name
+        }
+    };
+    println!("{reset}{color_bright_cyan}[{process}-{thread_name}] {color_blue}[{date}|{time}] {style_bold}{log_type}{reset}{color} {message}{reset}")
 }
 
 pub fn log_info(message:&str,process:&str){

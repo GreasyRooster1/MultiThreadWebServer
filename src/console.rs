@@ -43,20 +43,20 @@ async fn async_input(){
     loop {
         select! {
             _ = signal::ctrl_c() => {
-                println!("received ctrl+c, killing process");
+                log_info("received ctrl+c, killing process","console");
                 std::process::exit(0);
                 break;
             }
             res = stdin.next_line() => {
                 match res{
                     Ok(None) => {
-                        println!("no message was given");
+                        log_warn("no command was inputted","console");
                     }
                     Ok(Some(..))=>{
                         handel_console_input(res.unwrap().unwrap());
                     }
                     Err(_) => {
-                        println!("error occurred while reading input");
+                        log_warn("error occurred on stdin.next_line()","console");
                         break;
                     }
                 }
@@ -68,19 +68,20 @@ async fn async_input(){
 fn handel_console_input(message: String){
     match message.as_str() {
         "forcequit"=>{
-            log_info("killing main process...","forcequit");
+            log_info("killing main process...","console");
             std::process::exit(0);
         }
         "logtest"=>{
-            log_info("testing the logs, following logs should be ignored","logtest");
-            log_debug("debugging...","logtest");
-            log_info("wow this is a log!","logtest");
-            log_warn("im warning you...","logtest");
-            log_error("uh oh!","logtest");
-            log_critical("some thing really bad happened","logtest");
-            log_info("log test has concluded!","logtest");
+            log_info("testing the logs, following logs should be ignored","console");
+            log_debug("debugging...","console");
+            log_info("wow this is a log!","console");
+            log_warn("im warning you...","console");
+            log_error("uh oh!","console");
+            log_critical("some thing really bad happened","console");
+            log_info("log test has concluded!","console");
         }
-
-        _ => {}
+        _ => {
+            log_info("that doesnt appear to be a command!","console")
+        }
     }
 }

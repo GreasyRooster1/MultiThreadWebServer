@@ -1,5 +1,6 @@
 use crate::{files, paths};
 use crate::files::load_contents;
+use crate::logging::log_debug;
 use crate::paths::{DATA_PATH, DEFAULT_PATH, HIDDEN_PATH};
 
 pub(crate) fn find(uri: &str) -> String {
@@ -79,7 +80,7 @@ impl HTTPResponse {
             (load_contents(paths::NOT_FOUND_PATH),"NOT FOUND")
         };
         let mime = get_mime_type(parse(extension(uri)).as_str());
-        println!("mime type is: {}", mime);
+        log_debug(format!("mime type is: {}", mime).as_str(),"worker");
         HTTPResponse::from_bytes_with_mime(status.to_string(),mime,contents.as_slice())
     }
 }

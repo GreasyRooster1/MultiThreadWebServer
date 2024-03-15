@@ -30,12 +30,20 @@ async fn main() {
     let _async_input = start_async_input();
 
     for stream in listener.incoming() {
-        let stream = stream.unwrap();
+        let stream = match stream {
+            Ok(_) => {
+                stream.unwrap()
+            }
+            Err(_) => {
+                log_warn("error occurred when unwrapping stream","main");
+                continue;
+            }
+        };
         pool.execute(|| {
             handel_connection(stream);
         });
     }
-    println!("Main process ended");
+    log_warn("Stopped listening for connections, quitting","main");
 }
 
 fn handel_connection(mut stream: TcpStream) {
@@ -44,7 +52,7 @@ fn handel_connection(mut stream: TcpStream) {
     let buf_reader_next_line = buf_reader.lines().next();
     let request_line_result = match buf_reader_next_line {
         None=> {
-            warn!("received empty packet");
+            log_warn("received empty packet","worker");
             return;
         },
         _=>buf_reader_next_line.unwrap(),
@@ -52,7 +60,7 @@ fn handel_connection(mut stream: TcpStream) {
     let request_line = match request_line_result {
         Ok(_) => request_line_result.unwrap(),
         Err(_) => {
-            warn!("Error caused on reading from buffer");
+            log_warn("Error caused on reading from buffer","worker");
             "GET /404 HTTP/1.1".to_string()
         }
     };
@@ -60,13 +68,13 @@ fn handel_connection(mut stream: TcpStream) {
     let uri = uri::extract(request_line.as_str());
     let client_addr = stream.local_addr().unwrap().ip().to_string();
 
-    println!("received request from {client_addr} asking for uri {uri}");
+    log_info(format!("received request from {client_addr} asking for uri {uri}").as_str(),"worker");
 
     let response =special_cases(uri);
 
     stream.write_all(response.as_slice()).unwrap();
 
-    println!("responded to request!");
+    log_info("responded to request!","worker");
 }
 
 
