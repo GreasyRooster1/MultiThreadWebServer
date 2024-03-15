@@ -5,6 +5,7 @@ mod actions;
 mod cryptography;
 mod console;
 mod threadlib;
+mod logging;
 
 use std::{io::{prelude::*, BufReader}, net::{TcpListener, TcpStream}, thread};
 use std::time::Duration;
@@ -13,6 +14,7 @@ use rsa::pkcs1::{EncodeRsaPrivateKey, LineEnding};
 use rsa::pkcs8::{EncodePrivateKey, EncodePublicKey};
 use rsa::{RsaPrivateKey, RsaPublicKey};
 use threadlib::ThreadPool;
+use logging::*;
 use crate::actions::special_cases;
 use crate::console::start_async_input;
 use crate::files::load_contents;
@@ -21,6 +23,11 @@ use crate::uri::*;
 
 #[tokio::main]
 async fn main() {
+    log_debug("debugging...","main");
+    log_info("wow this is a log!","main");
+    log_warn("im warning you...","main");
+    log_error("uh oh!","main");
+    log_critical("some thing really bad happened","main");
     let listener = TcpListener::bind("0.0.0.0:8081").unwrap();
     let pool = ThreadPool::new(15);
 
