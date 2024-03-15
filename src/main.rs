@@ -22,13 +22,23 @@ use crate::paths::DEFAULT_PATH;
 use crate::uri::*;
 
 pub const THREAD_POOL_SIZE:usize = 32;
+pub const PORT:usize = 8081;
 
 #[tokio::main]
 async fn main() {
     log_title("Rust Webserver V1.0");
     log_info("starting...","main");
 
-    let listener = TcpListener::bind("0.0.0.0:8081").unwrap();
+    let listener = match TcpListener::bind(format!("0.0.0.0:{PORT}")) {
+        Ok(tcp) => {
+            tcp
+        }
+        Err(_) => {
+            log_critical(format!("Could not bind to port {PORT}, shutting down").as_str(),"main");
+            std::process::exit(0);
+        }
+    };
+
     let pool = ThreadPool::new(THREAD_POOL_SIZE);
 
     log_info(format!("create thread pool with {THREAD_POOL_SIZE} threads").as_str(),"main");
