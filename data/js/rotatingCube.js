@@ -10,10 +10,18 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize( scale.width, scale.height );
 container.appendChild( renderer.domElement );
 
-const geometry =new THREE.TorusGeometry( 10, 3, 16, 100 );
+const geometry =new THREE.BoxGeometry( 3,3,3);
 const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 const cube = new THREE.Mesh( geometry, material );
 scene.add( cube );
+
+const pointLight1 = new THREE.PointLight( 0xffffff, 3, 0, 0 );
+pointLight1.position.set( 50, 50, 50 );
+scene.add( pointLight1 );
+
+const pointLight2 = new THREE.PointLight( 0xffffff, 1, 0, 0 );
+pointLight2.position.set( - 50, - 50, - 50 );
+scene.add( pointLight2 );
 
 camera.position.z = 5;
 
