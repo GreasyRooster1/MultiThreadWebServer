@@ -2,6 +2,7 @@ use std::{
     sync::{mpsc, Arc, Mutex},
     thread,
 };
+use std::fmt::format;
 use crate::logging::{log_error, log_info};
 
 pub struct ThreadPool {
@@ -58,7 +59,10 @@ struct Worker {
 
 impl Worker {
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
-        let thread = thread::spawn(move || loop {
+        let name = format!("worker-{id}");
+        let builder = thread::Builder::new().name(name);
+
+        let thread = builder.spawn(move || loop {
             let message = receiver.lock().unwrap().recv();
 
             match message {
@@ -73,7 +77,8 @@ impl Worker {
                     break;
                 }
             }
-        });
+            log_info(format!("worker {id} finished job, awaiting next job").as_str(),"worker")
+        }).unwrap();
         Worker {
             id,
             thread: Some(thread),
