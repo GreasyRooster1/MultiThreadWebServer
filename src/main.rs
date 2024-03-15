@@ -25,6 +25,7 @@ pub const THREAD_POOL_SIZE:usize = 32;
 
 #[tokio::main]
 async fn main() {
+    log_title("Rust Webserver V1.0");
     log_info("starting...","main");
 
     let listener = TcpListener::bind("0.0.0.0:8081").unwrap();

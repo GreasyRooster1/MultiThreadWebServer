@@ -57,3 +57,8 @@ pub fn log_critical(message:&str,process:&str){
     let date = Local::now().date_naive();
     generate_log_with_color(message,process,time,date,format!("{color_black}{bg_bright_red}CRITICAL"),format!("{style_bold}{color_bright_red}"))
 }
+
+pub fn log_title(message:&str){
+    let reset = format!("{style_reset}{color_white}{bg_reset}");
+    println!("{style_bold}{color_blue}----------==={color_bright_magenta}{message}{color_blue}===----------{reset}")
+}
