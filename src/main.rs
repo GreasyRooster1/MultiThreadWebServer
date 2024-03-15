@@ -21,13 +21,21 @@ use crate::files::load_contents;
 use crate::paths::DEFAULT_PATH;
 use crate::uri::*;
 
+pub const THREAD_POOL_SIZE:usize = 32;
+
 #[tokio::main]
 async fn main() {
+    log_info("starting...","main");
 
     let listener = TcpListener::bind("0.0.0.0:8081").unwrap();
-    let pool = ThreadPool::new(15);
+    let pool = ThreadPool::new(THREAD_POOL_SIZE);
+
+    log_info(format!("create thread pool with {THREAD_POOL_SIZE} threads").as_str(),"main");
 
     let _async_input = start_async_input();
+    log_info("console commands are now available","main");
+
+    log_info("begin TCP listen","main");
 
     for stream in listener.incoming() {
         let stream = match stream {
