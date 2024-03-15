@@ -3,6 +3,8 @@ mod paths;
 mod uri;
 mod actions;
 mod cryptography;
+mod console;
+mod threadlib;
 
 use std::{io::{prelude::*, BufReader}, net::{TcpListener, TcpStream}, thread};
 use std::time::Duration;
@@ -10,15 +12,19 @@ use log::{error, warn};
 use rsa::pkcs1::{EncodeRsaPrivateKey, LineEnding};
 use rsa::pkcs8::{EncodePrivateKey, EncodePublicKey};
 use rsa::{RsaPrivateKey, RsaPublicKey};
-use MultiThreadWebServer::ThreadPool;
+use threadlib::ThreadPool;
 use crate::actions::special_cases;
+use crate::console::start_async_input;
 use crate::files::load_contents;
 use crate::paths::DEFAULT_PATH;
 use crate::uri::*;
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let listener = TcpListener::bind("0.0.0.0:8081").unwrap();
     let pool = ThreadPool::new(15);
+
+    let _async_input = start_async_input();
 
     for stream in listener.incoming() {
         let stream = stream.unwrap();
@@ -26,7 +32,7 @@ fn main() {
             handel_connection(stream);
         });
     }
-    println!("Shutting down!");
+    println!("Main process ended");
 }
 
 fn handel_connection(mut stream: TcpStream) {
