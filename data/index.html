@@ -34,13 +34,12 @@
             <p class="minor-text bottom" id="Version">V1.0</p>
             <p class="block-text-xl center-text" id="title">Rust Web Server</p>
         </div>
-        <div class="grid-item" id="projects-item">
-            <a href="/projects">
-                <p class="block-text left-text" id="projects-title">Projects</p>
-                <div id="rotating-cube"></div>
-            </a>
+        <div class="grid-item" id="projects-item" onclick="location.href='/projects'">
+            <p class="block-text left-text" id="projects-title">Projects</p>
+            <div id="projects-cover"></div>
+            <div id="rotating-cube"></div>
         </div>
-        <div class="grid-item" id="security-item" onclick="location.href='/security';">
+        <div class="grid-item" id="security-item" onclick="location.href='/security'">
             <div id="security-effect">
                 <canvas width="500" height="500" id="security-matrix">your browser doesnt support HTML5</canvas>
             </div>

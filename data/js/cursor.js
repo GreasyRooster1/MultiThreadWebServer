@@ -23,7 +23,7 @@ const maskObjects = [
     document.getElementById("github-mask"),
     document.getElementById("title-mask"),
     document.getElementById("security-cover"),
-    document.getElementById("projects-item"),
+    document.getElementById("projects-cover"),
 ]
 
 

@@ -138,12 +138,27 @@
     height: 100%;
 }
 #projects-title{
-    z-index: 100;
+    z-index: 200;
     transition:0.5s;
 }
-#projects-item:hover{
+#projects-item:hover #projects-cover{
     background-color: var(--background-high);
 }
 #projects-item:hover #projects-title {
     color:var(--text-block-high)
+}
+#projects-cover{
+    background: var(--background-med);
+    top:0;
+    left: 0;
+    width: 101%;
+    height: 101%;
+    position: absolute;
+    z-index: 100;
+    transition: 0.5s;
+    mask: radial-gradient(
+            circle at var(--mouse-x) var(--mouse-y),
+            rgba(0, 0, 0, 0) var(--mask-size),
+            rgba(0, 0, 0, 1) var(--mask-size)
+    );
 }
