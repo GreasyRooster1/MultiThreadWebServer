@@ -23,30 +23,29 @@ use crate::uri::*;
 
 pub const THREAD_POOL_SIZE:usize = 32;
 pub const PORT:usize = 8081;
+pub const IP:&str = "192.168.15.1";
 
 #[tokio::main]
 async fn main() {
     log_title("Rust Webserver V1.0");
     log_info("starting...","main");
 
-    let listener = match TcpListener::bind(format!("0.0.0.0:{PORT}")) {
+    let listener = match TcpListener::bind(format!("{IP}:{PORT}")) {
         Ok(tcp) => {
             tcp
         }
         Err(_) => {
-            log_critical(format!("Could not bind to port {PORT}, shutting down").as_str(),"main");
+            log_critical(format!("Could not bind to {IP}:{PORT}, shutting down").as_str(),"main");
             std::process::exit(0);
         }
     };
+    log_info(format!("begin TCP listen on {IP}:{PORT}").as_str(),"main");
 
     let pool = ThreadPool::new(THREAD_POOL_SIZE);
-
     log_info(format!("create thread pool with {THREAD_POOL_SIZE} threads").as_str(),"main");
 
     let _async_input = start_async_input();
     log_info("console commands are now available","main");
-
-    log_info("begin TCP listen","main");
 
     for stream in listener.incoming() {
         let stream = match stream {
