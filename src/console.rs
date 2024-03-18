@@ -1,5 +1,6 @@
 use std::process::Command;
 use std::{env, thread};
+use std::fmt::format;
 use tokio::*;
 use tokio::signal;
 use tokio::sync::mpsc;
@@ -87,6 +88,12 @@ fn handel_console_input(message: String){
             log_warn("RESTART WILL CAUSE ISSUES, BE CAREFUL","console");
             restart_command();
         }
+        "help"=>{
+            help_command();
+        }
+        "shutdown"=>{
+            shutdown_command();
+        }
         _ => {
             log_info("that doesnt appear to be a command!","console")
         }
@@ -112,4 +119,16 @@ fn restart_command(){
             log_warn("could not restart, cant find self","console");
         }
     };
+}
+fn help_command(){
+    let command_names = vec!["forcequit","logtest","restart","help"];
+    log_info(format!("commands: {:#?}",command_names).as_str(),"console");
+}
+fn shutdown_command(){
+    log_info("shutting down over 5 minutes","console");
+    let handel = thread::spawn(||{
+        thread::sleep(time::Duration::from_secs(5));
+        log_info("shutting down...","console");
+        std::process::exit(0);
+    });
 }
