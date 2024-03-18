@@ -1,7 +1,9 @@
 use std::{process, thread};
+use std::backtrace::Backtrace;
 use std::time::SystemTime;
 use chrono::*;
 use inline_colorization::*;
+use log::trace;
 
 //im no longer colored :(
 
@@ -25,7 +27,7 @@ fn generate_log_with_color(message:&str,process:&str,time:NaiveTime,date:NaiveDa
             name
         }
     };
-    println!("{reset}{color_bright_cyan}[{process}-{thread_name}] {color_blue}[{date}|{time}] {style_bold}{log_type}{reset}{color} {message}{reset}")
+    println!("{reset}{color_bright_cyan}[{process}|{thread_name}] {color_blue}[{date}|{time}] {style_bold}{log_type}{reset}{color} {message}{reset}")
 }
 
 pub fn log_info(message:&str,process:&str){
@@ -55,7 +57,23 @@ pub fn log_error(message:&str,process:&str){
 pub fn log_critical(message:&str,process:&str){
     let time = Local::now().time();
     let date = Local::now().date_naive();
-    generate_log_with_color(message,process,time,date,format!("{color_black}{bg_bright_red}CRITICAL"),format!("{style_bold}{color_bright_red}"))
+    generate_log_with_color(message,process,time,date,format!("{color_black}{bg_bright_red}CRITICAL"),format!("{style_bold}{color_bright_red}"));
+
+}
+
+pub fn log_trace(message:&str,process:&str){
+    let trace= Backtrace::force_capture();
+    let reset = format!("{style_reset}{color_white}{bg_reset}");
+    let thread = thread::current();
+    let time = Local::now().time();
+    let date = Local::now().date_naive();
+    let thread_name = match thread.name() {
+        None => {"anon"}
+        Some(name) => {
+            name
+        }
+    };
+    println!("{reset}{color_bright_cyan}[{process}-{thread_name}] {color_blue}[{date}|{time}] {style_bold}{color_bright_red}TRACE{reset} {message}{reset}\n{trace}")
 }
 
 pub fn log_title(message:&str){

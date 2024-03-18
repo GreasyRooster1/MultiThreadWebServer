@@ -23,7 +23,7 @@ use crate::uri::*;
 
 pub const THREAD_POOL_SIZE:usize = 32;
 pub const PORT:usize = 8081;
-pub const IP:&str = "192.168.15.1";
+pub const IP:&str = "0.0.0.0";
 
 #[tokio::main]
 async fn main() {
@@ -34,8 +34,10 @@ async fn main() {
         Ok(tcp) => {
             tcp
         }
-        Err(_) => {
+        Err(err) => {
+            log_error(format!("error on bind: {err}").as_str(),"main");
             log_critical(format!("Could not bind to {IP}:{PORT}, shutting down").as_str(),"main");
+            log_trace("Tracing bind failure...","main");
             std::process::exit(0);
         }
     };
