@@ -1,8 +1,12 @@
+use std::process::Command;
+use std::{env, thread};
+use std::fmt::format;
 use tokio::*;
 use tokio::signal;
 use tokio::sync::mpsc;
 use tokio::task::JoinHandle;
 use crate::logging::{log_critical, log_debug, log_error, log_info, log_warn};
+use crate::main;
 use crate::threadlib::*;
 
 struct InteractiveStdin {
@@ -80,8 +84,51 @@ fn handel_console_input(message: String){
             log_critical("some thing really bad happened","console");
             log_info("log test has concluded!","console");
         }
+        "restart"=>{
+            log_warn("RESTART WILL CAUSE ISSUES, BE CAREFUL","console");
+            restart_command();
+        }
+        "help"=>{
+            help_command();
+        }
+        "shutdown"=>{
+            shutdown_command();
+        }
         _ => {
             log_info("that doesnt appear to be a command!","console")
         }
     }
+}
+
+fn restart_command(){
+    match env::current_exe() {
+        Ok(exe_path) =>{
+            log_info(format!("found self as {}",exe_path.display()).as_str(),"console");
+            match Command::new(format!("{}",exe_path.display())).spawn() {
+                Ok(_) => {
+                    log_info("ran self, shutting down...","console");
+                    std::process::exit(0);
+                }
+                Err(_) => {
+                    log_warn("failed to spawn new process","console");
+                }
+            }
+
+        }
+        Err(e) => {
+            log_warn("could not restart, cant find self","console");
+        }
+    };
+}
+fn help_command(){
+    let command_names = vec!["forcequit","logtest","restart","help"];
+    log_info(format!("commands: {:#?}",command_names).as_str(),"console");
+}
+fn shutdown_command(){
+    log_info("shutting down over 5 minutes","console");
+    let handel = thread::spawn(||{
+        thread::sleep(time::Duration::from_secs(5));
+        log_info("shutting down...","console");
+        std::process::exit(0);
+    });
 }
