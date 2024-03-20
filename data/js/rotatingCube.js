@@ -1,4 +1,6 @@
 import * as THREE from 'three.js';
+import RenderPass from 'renderpass.js';
+import EffectComposer from 'effectcomposer.js';
 
 const container = document.getElementById("rotating-cube")
 const scale = container.getBoundingClientRect();
@@ -9,6 +11,10 @@ const camera = new THREE.PerspectiveCamera( 75, scale.width / scale.height, 0.1,
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( scale.width, scale.height );
 container.appendChild( renderer.domElement );
+
+const renderScene = new RenderPass(scene,camera);
+const composer = new EffectComposer(renderer);
+composer.addPass(renderScene);
 
 const geometry =new THREE.BoxGeometry( 3,3,3);
 const material = new THREE.MeshPhongMaterial( { color: 0x2222ff } );
@@ -37,7 +43,7 @@ function animate() {
 
 
 
-    renderer.render( scene, camera );
+    composer.render( scene, camera );
 }
 
 animate();
