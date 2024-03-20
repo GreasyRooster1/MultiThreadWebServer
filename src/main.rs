@@ -1,3 +1,5 @@
+extern crate core;
+
 mod files;
 mod paths;
 mod uri;
@@ -6,6 +8,7 @@ mod cryptography;
 mod console;
 mod threadlib;
 mod logging;
+mod util;
 
 use std::{io::{prelude::*, BufReader}, net::{TcpListener, TcpStream}, thread};
 use std::time::Duration;
@@ -27,6 +30,7 @@ pub const IP:&str = "0.0.0.0";
 
 #[tokio::main]
 async fn main() {
+
     log_title("Rust Webserver V1.0");
     log_info("starting...","main");
 

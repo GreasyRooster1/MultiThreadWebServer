@@ -5,9 +5,10 @@ use tokio::*;
 use tokio::signal;
 use tokio::sync::mpsc;
 use tokio::task::JoinHandle;
-use crate::logging::{log_critical, log_debug, log_error, log_info, log_warn};
+use crate::logging::{log_critical, log_debug, log_error, log_info, log_pause, log_warn};
 use crate::main;
 use crate::threadlib::*;
+use crate::util::execute_command;
 
 struct InteractiveStdin {
     chan: mpsc::Receiver<std::io::Result<String>>,
@@ -71,10 +72,6 @@ async fn async_input(){
 
 fn handel_console_input(message: String){
     match message.as_str() {
-        "forcequit"=>{
-            log_info("killing main process...","console");
-            std::process::exit(0);
-        }
         "logtest"=>{
             log_info("testing the logs, following logs should be ignored","console");
             log_debug("debugging...","console");
@@ -82,6 +79,7 @@ fn handel_console_input(message: String){
             log_warn("im warning you...","console");
             log_error("uh oh!","console");
             log_critical("some thing really bad happened","console");
+            log_pause("test","console");
             log_info("log test has concluded!","console");
         }
         "restart"=>{
@@ -94,6 +92,10 @@ fn handel_console_input(message: String){
         "shutdown"=>{
             shutdown_command();
         }
+        "shutdown-force"=>{
+            log_info("killing main process...","console");
+            std::process::exit(0);
+        }
         "fetch"=>{
             fetch_command();
         }
@@ -101,6 +103,11 @@ fn handel_console_input(message: String){
             log_info("that doesnt appear to be a command!","console")
         }
     }
+}
+
+fn help_command(){
+    let command_names = vec!["shutdown-force","logtest","restart","help","fetch","fetch-clean"];
+    log_info(format!("commands: {:#?}",command_names).as_str(),"console");
 }
 
 fn restart_command(){
@@ -123,24 +130,32 @@ fn restart_command(){
         }
     };
 }
-fn help_command(){
-    let command_names = vec!["forcequit","logtest","restart","help"];
-    log_info(format!("commands: {:#?}",command_names).as_str(),"console");
-}
 fn shutdown_command(){
     log_info("shutting down over 5 minutes","console");
     let handel = thread::spawn(||{
-        thread::sleep(time::Duration::from_secs(5));
+        thread::sleep(time::Duration::from_secs(5*60*60));
         log_info("shutting down...","console");
         std::process::exit(0);
     });
 }
 
 fn fetch_command(){
-    //git init
-    //
-    //create
-
-    //git reset --hard FETCH_HEAD
-    //git pull MultiThreadWebServer master
+    log_critical("PLEASE DONT RUN THIS IN RUST ROVER!!","console");
+    log_pause("PLEASE CTRL+C IF YOU ARE RUNNING IN RUST ROVER","console");
+    execute_command("git",vec!["init"]);
+    execute_command("git",vec!["remote","add","-f","origin","https://github.com/GreasyRooster1/MultiThreadWebServer.git"]);
+    execute_command("git",vec!["fetch","--all"]);
+    execute_command("git",vec!["reset","--hard"]);
+    execute_command("git",vec!["fetch","--all"]);
+    execute_command("git",vec!["pull"]);
+}
+fn fetch_clean(){
+    log_critical("PLEASE DONT RUN THIS IN RUST ROVER!!","console");
+    log_pause("PLEASE CTRL+C IF YOU ARE RUNNING IN RUST ROVER","console");
+    execute_command("git",vec!["init"]);
+    execute_command("git",vec!["remote","add","-f","origin","https://github.com/GreasyRooster1/MultiThreadWebServer.git"]);
+    execute_command("git",vec!["fetch","--all"]);
+    execute_command("git",vec!["reset","--hard"]);
+    execute_command("git",vec!["fetch","--all"]);
+    execute_command("git",vec!["pull"]);
 }

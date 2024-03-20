@@ -1,4 +1,5 @@
-use std::{process, thread};
+use core::time;
+use std::{io, process, thread};
 use std::backtrace::Backtrace;
 use std::io::{Read, stdin, stdout, Write};
 use std::time::SystemTime;
@@ -7,7 +8,17 @@ use inline_colorization::*;
 use log::trace;
 
 //im no longer colored :(
-
+fn generate_log_and_return(message:&str, process:&str, time:NaiveTime, date:NaiveDate, log_type: String) -> String {
+    let reset = format!("{style_reset}{color_white}{bg_reset}");
+    let thread = thread::current();
+    let thread_name = match thread.name() {
+        None => {"anon"}
+        Some(name) => {
+            name
+        }
+    };
+    format!("{reset}{color_bright_cyan}[{process}|{thread_name}] {color_blue}[{date}|{time}] {style_bold}{log_type}{reset} {message}{reset}")
+}
 fn generate_log(message:&str,process:&str,time:NaiveTime,date:NaiveDate,log_type: String){
     let reset = format!("{style_reset}{color_white}{bg_reset}");
     let thread = thread::current();
@@ -82,12 +93,9 @@ pub fn log_title(message:&str){
     println!("{style_bold}{color_blue}----------==={color_bright_magenta}{message}{color_blue}===----------{reset}")
 }
 
-fn log_pause(message:&str,process:&str) {
+pub fn log_pause(message:&str,process:&str) {
     let time = Local::now().time();
     let date = Local::now().date_naive();
-    let mut out = stdout();
-    let log = generate_log(message,process,time,date,"PAUSE".as_str());
-    out.write(log.as_bytes()).unwrap();
-    out.flush().unwrap();
-    stdin().read(&mut [0]).unwrap();
+    generate_log(message,process,time,date,format!("{color_blue}PAUSE"));
+    thread::sleep(time::Duration::from_secs(10));
 }
