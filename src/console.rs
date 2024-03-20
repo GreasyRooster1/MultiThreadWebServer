@@ -147,7 +147,7 @@ fn fetch_command(){
     execute_command("git",vec!["fetch","--all"]);
     execute_command("git",vec!["reset","--hard"]);
     execute_command("git",vec!["fetch","--all"]);
-    execute_command("git",vec!["pull"]);
+    execute_command("git",vec!["pull","origin","master"]);
 }
 fn fetch_clean(){
     log_critical("PLEASE DONT RUN THIS IN RUST ROVER!!","console");
