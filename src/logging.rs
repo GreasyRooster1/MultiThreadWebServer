@@ -1,5 +1,6 @@
 use std::{process, thread};
 use std::backtrace::Backtrace;
+use std::io::{Read, stdin, stdout, Write};
 use std::time::SystemTime;
 use chrono::*;
 use inline_colorization::*;
@@ -79,4 +80,14 @@ pub fn log_trace(message:&str,process:&str){
 pub fn log_title(message:&str){
     let reset = format!("{style_reset}{color_white}{bg_reset}");
     println!("{style_bold}{color_blue}----------==={color_bright_magenta}{message}{color_blue}===----------{reset}")
+}
+
+fn log_pause(message:&str,process:&str) {
+    let time = Local::now().time();
+    let date = Local::now().date_naive();
+    let mut out = stdout();
+    let log = generate_log(message,process,time,date,"PAUSE".as_str());
+    out.write(log.as_bytes()).unwrap();
+    out.flush().unwrap();
+    stdin().read(&mut [0]).unwrap();
 }
