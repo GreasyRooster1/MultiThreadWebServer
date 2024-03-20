@@ -1,7 +1,6 @@
 extern crate core;
 
 mod files;
-mod paths;
 mod uri;
 mod actions;
 mod cryptography;
@@ -9,6 +8,7 @@ mod console;
 mod threadlib;
 mod logging;
 mod util;
+mod paths;
 
 use std::{io::{prelude::*, BufReader}, net::{TcpListener, TcpStream}, thread};
 use std::time::Duration;
@@ -20,9 +20,6 @@ use threadlib::ThreadPool;
 use logging::*;
 use crate::actions::special_cases;
 use crate::console::start_async_input;
-use crate::files::load_contents;
-use crate::paths::DEFAULT_PATH;
-use crate::uri::*;
 
 pub const THREAD_POOL_SIZE:usize = 32;
 pub const PORT:usize = 8081;

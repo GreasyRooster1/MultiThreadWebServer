@@ -1,7 +1,7 @@
 use crate::{files, paths};
 use crate::files::load_contents;
 use crate::logging::log_debug;
-use crate::paths::{DATA_PATH, DEFAULT_PATH, HIDDEN_PATH};
+use crate::paths::*;
 
 pub(crate) fn find(uri: &str) -> String {
     //this should return "data/foo.html" (or whatever else, based on the URI) and keep uri's owner the same
@@ -77,7 +77,7 @@ impl HTTPResponse {
         let (contents,status) = if files::file_exists(filename.as_str()) {
             (load_contents(filename.as_str()),"200 OK")
         }else{
-            (load_contents(paths::NOT_FOUND_PATH),"NOT FOUND")
+            (load_contents(NOT_FOUND_PATH),"NOT FOUND")
         };
         let mime = get_mime_type(parse(extension(uri)).as_str());
         log_debug(format!("mime type is: {}", mime).as_str(),"worker");

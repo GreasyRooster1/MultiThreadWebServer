@@ -6,7 +6,6 @@ use std::time::SystemTime;
 use chrono::*;
 use inline_colorization::*;
 use log::trace;
-
 //im no longer colored :(
 fn generate_log_and_return(message:&str, process:&str, time:NaiveTime, date:NaiveDate, log_type: String) -> String {
     let reset = format!("{style_reset}{color_white}{bg_reset}");
@@ -72,7 +71,6 @@ pub fn log_critical(message:&str,process:&str){
     generate_log_with_color(message,process,time,date,format!("{color_black}{bg_bright_red}CRITICAL"),format!("{style_bold}{color_bright_red}"));
 
 }
-
 pub fn log_trace(message:&str,process:&str){
     let trace= Backtrace::force_capture();
     let reset = format!("{style_reset}{color_white}{bg_reset}");
