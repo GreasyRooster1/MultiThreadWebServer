@@ -8,7 +8,15 @@ pub fn file_exists(filename: &str) -> bool {
 }
 
 pub fn load_contents(file_name: &str) -> Vec<u8> {
-    fs::read(file_name).unwrap()
+    match fs::read(file_name){
+        Ok(res) => {
+            res
+        }
+        Err(_) => {
+            log_warn(format!("could not load file: {file_name}").as_str(),"load_contents");
+            vec![]
+        }
+    }
 }
 
 pub fn safe_load(filename: &str)->Option<Vec<u8>>{
