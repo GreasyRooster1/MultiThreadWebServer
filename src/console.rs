@@ -94,6 +94,9 @@ fn handel_console_input(message: String){
         "shutdown"=>{
             shutdown_command();
         }
+        "fetch"=>{
+            fetch_command();
+        }
         _ => {
             log_info("that doesnt appear to be a command!","console")
         }
@@ -131,4 +134,13 @@ fn shutdown_command(){
         log_info("shutting down...","console");
         std::process::exit(0);
     });
+}
+
+fn fetch_command(){
+    //git init
+    //
+    //create
+
+    //git reset --hard FETCH_HEAD
+    //git pull MultiThreadWebServer master
 }
