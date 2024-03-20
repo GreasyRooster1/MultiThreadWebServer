@@ -8,7 +8,7 @@ use tokio::task::JoinHandle;
 use crate::logging::{log_critical, log_debug, log_error, log_info, log_pause, log_warn};
 use crate::main;
 use crate::threadlib::*;
-use crate::util::execute_command;
+use crate::util::{delete_directory, delete_file, execute_command};
 
 struct InteractiveStdin {
     chan: mpsc::Receiver<std::io::Result<String>>,
@@ -99,6 +99,9 @@ fn handel_console_input(message: String){
         "fetch"=>{
             fetch_command();
         }
+        "fetch-clean"=>{
+            fetch_clean_command()
+        }
         _ => {
             log_info("that doesnt appear to be a command!","console")
         }
@@ -149,13 +152,24 @@ fn fetch_command(){
     execute_command("git",vec!["fetch","--all"]);
     execute_command("git",vec!["pull","origin","master"]);
 }
-fn fetch_clean(){
+fn fetch_clean_command(){
     log_critical("PLEASE DONT RUN THIS IN RUST ROVER!!","console");
     log_pause("PLEASE CTRL+C IF YOU ARE RUNNING IN RUST ROVER","console");
-    execute_command("git",vec!["init"]);
-    execute_command("git",vec!["remote","add","-f","origin","https://github.com/GreasyRooster1/MultiThreadWebServer.git"]);
-    execute_command("git",vec!["fetch","--all"]);
-    execute_command("git",vec!["reset","--hard"]);
-    execute_command("git",vec!["fetch","--all"]);
-    execute_command("git",vec!["pull"]);
+    for path in vec!["./.gitignore","./Cargo.lock","./Cargo.toml","./README.md"]{
+        match delete_file(path){
+            Ok(_) => {}
+            Err(_) => {
+                log_warn(format!("couldnt delete file {path}").as_str(),"console")
+            }
+        };
+    }
+    for path in vec!["./.idea","./src"]{
+        match delete_directory(path){
+            Ok(_) => {}
+            Err(_) => {
+                log_warn(format!("couldnt delete file {path}").as_str(),"console")
+            }
+        };
+    }
+    log_info("removed unused files","console");
 }
